@@ -1,0 +1,34 @@
+TODO
+
+- butWas have alternate which just takes string instead of function
+    - maybe?
+- Better language in all classes and interfaces
+- refactor
+    - too many similar methods with 1 in name, need abstraction for supplier and function used in throws method
+    - domain classes, better names for fields/methods, remove lombok??
+- Design
+    - Split out must and could into two separate step builders, with static factories for both
+    - withMessage/hasMessage is it necessary?? 
+        - Remove ifThrowAn(Supplier...) and withMessage/hasMessage
+- Modules (java 9)
+    - only static Valid8or class can exported to user
+    - domain classes cannot be accessed
+- Extract out logic to delegates in Valid8orBuilder
+- predicate helpers without commons lang or commons math
+    - separate module
+- Documentation
+- Readme
+- examples
+- javadoc
+- changelog
+- jacoco
+- findbugs
+- pmd
+- push library to github/maven
+    - https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry
+    - https://docs.github.com/en/actions/guides/publishing-java-packages-with-maven
+
+- Tests
+    - Testlogger, or capture system out to test thenconsume emthod
+    - fluent api for mostSatisfy flow
+    - Predicate helpers
