@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import testinfrastructure.TestFixtures;
 
 import java.util.Optional;
+import java.util.concurrent.Flow;
+import java.util.function.Function;
 
 import static com.github.hanfak.valid8or.api.Valid8or.forInput;
 
@@ -36,5 +38,14 @@ class Valid8orTest extends TestFixtures {
 
   private int someAction() {
     return 2;
+  }
+
+  public static void main(String... args) {
+    Function<String, ? extends RuntimeException> blah = x -> new IllegalArgumentException();
+    Function<String, ? extends RuntimeException> blah1= x -> new IllegalArgumentException("custom fixed message");
+    Function<String, ? extends RuntimeException> blah2 = x -> new IllegalArgumentException("custom message using input: " + x);
+
+//    throw blah.apply("message");
+    throw blah.apply("message");
   }
 }

@@ -37,6 +37,13 @@ public class ExamplesForUsingDifferentInputs {
         .orElseThrowValidationException(IllegalArgumentException::new,
             (i, message) -> String.format("All issues for '%s' are '%s'", i, message));
 
+    forInput(someAction())
+        .couldSatisfy(x -> true).butWas(x -> "Some problem")
+        .orSatisfies(x -> true).ifNotThrowAn(IllegalArgumentException::new)
+        .orSatisfies(x -> true).ifNotThrow(IllegalArgumentException::new).withMessage(x -> "some other error")
+        .orElseThrowValidationException(IllegalArgumentException::new,
+            (i, message) -> String.format("All issues for '%s' are '%s'", i, message));
+
     Integer validateAction2 = forInput(someAction())
         .couldSatisfy(x -> true)
         .ifNotThrow(IllegalArgumentException::new)
