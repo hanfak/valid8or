@@ -1,6 +1,6 @@
 package flow;
 
-import com.github.hanfak.valid8or.implmentation.*;
+import com.github.hanfak.valid8or.implmentation.compound.*;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;

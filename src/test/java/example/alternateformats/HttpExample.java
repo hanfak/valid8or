@@ -1,10 +1,8 @@
 package example.alternateformats;
 
 import com.github.hanfak.valid8or.api.Valid8or;
-import com.github.hanfak.valid8or.api.helper.PredicateIntegerRules;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

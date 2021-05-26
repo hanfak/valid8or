@@ -3,43 +3,21 @@ package com.github.hanfak.valid8or.implmentation.mustsatisfy.singlerule;
 import com.github.hanfak.valid8or.implmentation.domain.ValidationException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import testinfrastructure.Helper;
 import testinfrastructure.TestFixtures;
 
-import static com.github.hanfak.valid8or.api.Valid8or.forInput;
+import static com.github.hanfak.valid8or.api.Valid8orMustSatisfyAllRules.forInput;
 
 public class ValidateWithMessageInExceptionUsingConsumerTest extends TestFixtures {
-
   @Nested
   class ReturnsInputAndNoExceptionThrownOrConsumerUsedWhenInputIsValid {
-
-    @Test
-    void usingCustomExceptionWithNoMessageAndConsumer() {
-      assertThat(
-          forInput(4)
-              .mustSatisfy(isEven).ifNotWillThrowAn(IllegalStateException::new)
-              .thenConsume(Helper::log)
-              .validate()
-      ).isEqualTo(4);
-    }
-
-    @Test
-    void usingCustomExceptionhasMessageAndConsumer() {
-      assertThat(
-          forInput(4)
-              .mustSatisfy(isEven).ifNotWillThrowAn(() -> new IllegalStateException("Some Exception"))
-              .thenConsume(Helper::log)
-              .validate()
-      ).isEqualTo(4);
-    }
 
     @Test
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumer() {
       assertThat(
           forInput(4)
-              .mustSatisfy(isEven).ifNotWillThrow(IllegalStateException::new)
-              .hasMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(Helper::log)
+              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
+              .withMessage(input -> "Is not even, for input: " + input)
+              .thenConsume(stubLogger::log)
               .validate()
       ).isEqualTo(4);
     }
@@ -49,8 +27,8 @@ public class ValidateWithMessageInExceptionUsingConsumerTest extends TestFixture
       assertThat(
           forInput(4)
               .mustSatisfy(isEven)
-              .butIs(input -> "Is not even, for input: " + input)
-              .thenConsume(Helper::log)
+              .butWas(input -> "Is not even, for input: " + input)
+              .thenConsume(stubLogger::log)
               .validate()
       ).isEqualTo(4);
     }
@@ -60,58 +38,37 @@ public class ValidateWithMessageInExceptionUsingConsumerTest extends TestFixture
   class ThrowsAnExceptionAndUsesConsumerWhenInputIsInvalid {
 
     @Test
-    void usingCustomExceptionWithNoMessageAndConsumerThrowsCustomException() {
-      assertThatThrownBy(() ->
-          forInput(3)
-              .mustSatisfy(isEven).ifNotWillThrowAn(IllegalStateException::new)
-              .thenConsume(Helper::log)
-              .validate()
-      )
-          .hasMessage(null)
-          .isInstanceOf(IllegalStateException.class);
-
-      // TODO: test log message.
-    }
-
-    @Test
-    void usingCustomExceptionhasMessageAndConsumerThrowsCustomException() {
-      assertThatThrownBy(() ->
-          forInput(3)
-              .mustSatisfy(isEven).ifNotWillThrowAn(() -> new IllegalStateException("Some Exception"))
-              .thenConsume(Helper::log)
-              .validate()
-      )
-          .hasMessage("Some Exception")
-          .isInstanceOf(IllegalStateException.class);
-      // TODO: test log message.
-    }
-
-    @Test
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumerThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .mustSatisfy(isEven).ifNotWillThrow(IllegalStateException::new)
-              .hasMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(Helper::log)
+              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
+              .withMessage(input -> "Is not even, for input: " + input)
+              .thenConsume(stubLogger::log)
               .validate()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(IllegalStateException.class);
-      // TODO: test log message.
-    }
+      assertThat(stubLogger.lastLogEventException())
+          .isInstanceOf(IllegalStateException.class)
+          .hasMessage("Is not even, for input: 3");
+      assertThat(stubLogger.lastLogEventMessage())
+          .isEqualTo("For input '3', was not valid because: 'Is not even, for input: 3'");    }
 
     @Test
     void usingCustomMessageAndNoCustomExceptionAndConsumerWillThrowValidationException() {
       assertThatThrownBy(() ->
           forInput(3)
               .mustSatisfy(isEven)
-              .butIs(input -> "Is not even, for input: " + input)
-              .thenConsume(Helper::log)
+              .butWas(input -> "Is not even, for input: " + input)
+              .thenConsume(stubLogger::log)
               .validate()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(ValidationException.class);
-      // TODO: test log message.
-    }
+      assertThat(stubLogger.lastLogEventException())
+          .isInstanceOf(ValidationException.class)
+          .hasMessage("Is not even, for input: 3");
+      assertThat(stubLogger.lastLogEventMessage())
+          .isEqualTo("For input '3', was not valid because: 'Is not even, for input: 3'");    }
   }
 }

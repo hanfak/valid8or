@@ -1,6 +1,6 @@
 package example.alternateformats;
 
-import com.github.hanfak.valid8or.implmentation.ConnectorOrValidateForCouldSatisfy;
+import com.github.hanfak.valid8or.implmentation.compound.ConnectorOrValidateForCouldSatisfy;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.github.hanfak.valid8or.api.Valid8or.forInput;

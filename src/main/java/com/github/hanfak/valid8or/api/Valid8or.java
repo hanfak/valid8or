@@ -1,7 +1,7 @@
 package com.github.hanfak.valid8or.api;
 
-import com.github.hanfak.valid8or.implmentation.Satisfy;
-import com.github.hanfak.valid8or.implmentation.Valid8orBuilder;
+import com.github.hanfak.valid8or.implmentation.compound.Satisfy;
+import com.github.hanfak.valid8or.implmentation.compound.Valid8orBuilder;
 
 public final class Valid8or {
 

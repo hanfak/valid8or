@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.util.function.Function;
 
+// tODO use effective java builder pattern
 @EqualsAndHashCode
 @Getter
 public final class ValidationRuleWithException<R,E> {
@@ -20,11 +21,11 @@ public final class ValidationRuleWithException<R,E> {
   }
 
   public static <R, E> ValidationRuleWithException<R, E> rule(R rule, E exception, Function<String, String> message) {
-    return new ValidationRuleWithException<R, E>(rule, exception, message);
+    return new ValidationRuleWithException<>(rule, exception, message);
   }
 
   public static <R, E> ValidationRuleWithExceptionBuilder<R, E> create() {
-    return new ValidationRuleWithExceptionBuilder<R, E>();
+    return new ValidationRuleWithExceptionBuilder<>();
   }
 
   public static <R, E> ValidationRuleWithExceptionBuilder<R, E> rule(R rule) {
@@ -56,7 +57,7 @@ public final class ValidationRuleWithException<R,E> {
     }
 
     public ValidationRuleWithException<R, E> build() {
-      return new ValidationRuleWithException<R, E>(rule, exception, message);
+      return new ValidationRuleWithException<>(rule, exception, message);
     }
   }
 }

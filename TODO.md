@@ -1,5 +1,7 @@
 TODO
 
+- validator: for mustValidate, butWas() can have next step throwException(), to define a exception if not want to use default ValidationException. Step after throwException() will be thenConsume() or terminal()
+    - Use arg for validate(Exception) to set all butWas to use custom exception
 - IDEA:: 
     - separate could and must into separate builders
     - separate compound exceptions (ie orElseThrowValidationException) with separate exeption (ie validate) for could
@@ -44,6 +46,7 @@ TODO
 - Extract out logic to delegates in Valid8orBuilder
 - predicate helpers without commons lang or commons math
     - separate module
+- delombok, and write tests
 - Documentation
 - Readme
 - examples

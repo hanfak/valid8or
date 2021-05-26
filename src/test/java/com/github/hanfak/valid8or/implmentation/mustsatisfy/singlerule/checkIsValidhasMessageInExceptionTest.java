@@ -3,54 +3,25 @@ package com.github.hanfak.valid8or.implmentation.mustsatisfy.singlerule;
 import org.junit.jupiter.api.Test;
 import testinfrastructure.TestFixtures;
 
-import static com.github.hanfak.valid8or.api.Valid8or.forInput;
+import static com.github.hanfak.valid8or.api.Valid8orMustSatisfyAllRules.forInput;
 
-// No use of consumer or exception thrown, this is up to the user
+// No use of consumer or exception thrown
 public class checkIsValidhasMessageInExceptionTest extends TestFixtures {
   // TODO paramtise for true/false assertion
-  @Test
-  void checksInputIsValidUsingExceptionWithoutMessage() {
-    assertThat(
-        forInput(4)
-            .mustSatisfy(isEven).ifNotWillThrowAn(IllegalStateException::new)
-            .isValid()
-    ).isTrue();
-
-    assertThat(
-        forInput(3)
-            .mustSatisfy(isEven).ifNotWillThrowAn(IllegalStateException::new)
-            .isValid()
-    ).isFalse();
-  }
-
-  @Test
-  void checksInputIsValidUsingCustomMessageInException() {
-    assertThat(
-        forInput(4)
-            .mustSatisfy(isEven).ifNotWillThrowAn(() -> new IllegalStateException("Some Exception"))
-            .isValid()
-    ).isTrue();
-
-    assertThat(
-        forInput(3)
-            .mustSatisfy(isEven).ifNotWillThrowAn(() -> new IllegalStateException("Some Exception"))
-            .isValid()
-    ).isFalse();
-  }
 
   @Test
   void checksInputIsValidUsingCustomMessageOutsideException() {
     assertThat(
         forInput(4)
-            .mustSatisfy(isEven).ifNotWillThrow(IllegalStateException::new)
-            .hasMessage(input -> "Is not even, for input: " + input)
+            .mustSatisfy(isEven).orThrow(IllegalStateException::new)
+            .withMessage(input -> "Is not even, for input: " + input)
             .isValid()
     ).isTrue();
 
     assertThat(
         forInput(3)
-            .mustSatisfy(isEven).ifNotWillThrow(IllegalStateException::new)
-            .hasMessage(input -> "Is not even, for input: " + input)
+            .mustSatisfy(isEven).orThrow(IllegalStateException::new)
+            .withMessage(input -> "Is not even, for input: " + input)
             .isValid()
     ).isFalse();
   }
@@ -60,14 +31,14 @@ public class checkIsValidhasMessageInExceptionTest extends TestFixtures {
     assertThat(
         forInput(4)
             .mustSatisfy(isEven)
-            .butIs(input -> "Is not even, for input: " + input)
+            .butWas(input -> "Is not even, for input: " + input)
             .isValid()
     ).isTrue();
 
     assertThat(
         forInput(3)
             .mustSatisfy(isEven)
-            .butIs(input -> "Is not even, for input: " + input)
+            .butWas(input -> "Is not even, for input: " + input)
             .isValid()
     ).isFalse();
   }

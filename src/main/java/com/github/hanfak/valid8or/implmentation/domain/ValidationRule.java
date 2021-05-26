@@ -3,6 +3,7 @@ package com.github.hanfak.valid8or.implmentation.domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+// tODO use effective java builder pattern
 @EqualsAndHashCode
 @Getter
 public final class ValidationRule<R,E> {
