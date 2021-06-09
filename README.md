@@ -1,5 +1,24 @@
 # valid8or
 
+## Usage
+
+### Maven
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+
+<dependency>
+  <groupId>com.github.hanfak</groupId>
+  <artifactId>valid8or</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
 Must ->  use when at least one validity check fails, it all fails
   - For Validate/validateReturnOptional -> fails fast, passes at the end
   - For the other terminal methods that return input -> fails at the end (in terminal method)
