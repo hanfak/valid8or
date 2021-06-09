@@ -1,4 +1,5 @@
-![Build](https://github.com/hanfak/valid8or/actions/workflows/main.yml/badge.svg)
+
+[![github workflow](https://img.shields.io/github/workflow/status/hanfak/valid8or/main.yml?style=flat-square)](https://github.com/hanfak/valid8or/actions)
 
 # valid8or
 
