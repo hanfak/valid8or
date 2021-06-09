@@ -1,3 +1,5 @@
+![Build](https://github.com/hanfak/valid8or/actions/workflows/main.yml/badge.svg)
+
 # valid8or
 
 ## Usage
