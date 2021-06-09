@@ -1,6 +1,7 @@
 package example.alternateformats;
 
 import com.github.hanfak.valid8or.implmentation.compound.ConnectorOrValidateForCouldSatisfy;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -15,6 +16,7 @@ import static java.util.stream.Collectors.joining;
 // Different
 public class ExamplesForUsingDifferentInputs {
   @Test
+  @Disabled
   void howToUseInput() {
     ConnectorOrValidateForCouldSatisfy<Integer> blah = forInput(2)
         .couldSatisfy(x -> false)

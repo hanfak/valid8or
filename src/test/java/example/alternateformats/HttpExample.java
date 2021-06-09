@@ -3,6 +3,7 @@ package example.alternateformats;
 import com.github.hanfak.valid8or.api.Valid8or;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class HttpExample {
   }
 
   @Test
+  @Disabled
   void name1() {
     String s = Valid8or.forInput(hello)
         .mustSatisfy(greaterThan200.and(lessThan300))
