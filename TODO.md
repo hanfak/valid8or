@@ -1,5 +1,6 @@
 TODO
 https://dzone.com/articles/publish-your-artifacts-to-maven-central
+https://shields.io/
 - validator: for mustValidate, butWas() can have next step throwException(), to define a exception if not want to use default ValidationException. Step after throwException() will be thenConsume() or terminal()
     - Use arg for validate(Exception) to set all butWas to use custom exception
 - IDEA:: 

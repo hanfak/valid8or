@@ -1,10 +1,29 @@
 
 [![github workflow](https://img.shields.io/github/workflow/status/hanfak/valid8or/main.yml?style=flat-square)](https://github.com/hanfak/valid8or/actions)
-
+[![](https://jitpack.io/v/hanfak/valid8or.svg)](https://jitpack.io/#hanfak/valid8or)
 # valid8or
 
-## Usage
+## Minimal Requirements 
 
+Java 11+
+
+## Usage
+### Gradle
+Add it in your root build.gradle at the end of repositories:
+```groovy
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+Add the dependency
+```groovy
+	dependencies {
+		implementation 'com.github.User:Repo:Tag'
+	}
+```
 ### Maven
 ```xml
 <repositories>
@@ -14,7 +33,6 @@
     </repository>
 </repositories>
 
-
 <dependency>
   <groupId>com.github.hanfak</groupId>
   <artifactId>valid8or</artifactId>
@@ -22,30 +40,6 @@
 </dependency>
 ```
 
-Must ->  use when at least one validity check fails, it all fails
-  - For Validate/validateReturnOptional -> fails fast, passes at the end
-  - For the other terminal methods that return input -> fails at the end (in terminal method)
-  - For terminal methods that dont return input -> processed at end (in terminal method)
-Could -> use when at all validity checks fails, it all fails
-  - For Validate/validateReturnOptional -> fails at then end, passes fast
-  - For the other terminal methods that return input -> fails at the end (in terminal method)
-  - For terminal methods that dont return input -> processed at end (in terminal method)
+## How to use 
 
-## Ideas of which order to do validations
-
-Secure by design P134
-- Origin
-  - Is the data from a legitimate sender?
-  - Cheap and quick
-- Size
-  - Is it reasonably big?
-  - Cheap and quick
-- Lexical content
-  - Does it contain the right characters and encoding?
-  - requires a scan, which takes a bit more time and resources
-- Syntax
-  - Is the format right?
-  - might require parsing the data, something that consumes CPU resources and occupies a thread for quite some time
--	Semantics
-  -	Does the data make sense?
-  -	probably involves a heavy round-trip to the database
+See [wiki](https://github.com/hanfak/valid8or/wiki)
