@@ -41,9 +41,6 @@ https://shields.io/
         - Remove ifThrowAn(Supplier...) and/or withMessage/hasMessage
     - If remove supplier, and dont want message in exception, can pass x ->"" or x -> {return null;} to withMessage
     - Use Queue to store rules (for mustSatisfy)??
-- Modules (java 9)
-    - only static Valid8or class can exported to user
-    - domain classes cannot be accessed
 - Extract out logic to delegates in Valid8orBuilder
 - predicate helpers without commons lang or commons math
     - separate module
