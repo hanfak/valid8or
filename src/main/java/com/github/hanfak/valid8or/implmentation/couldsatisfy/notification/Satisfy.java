@@ -1,4 +1,4 @@
-package com.github.hanfak.valid8or.implmentation.couldsatisfy;
+package com.github.hanfak.valid8or.implmentation.couldsatisfy.notification;
 
 import java.util.function.Predicate;
 

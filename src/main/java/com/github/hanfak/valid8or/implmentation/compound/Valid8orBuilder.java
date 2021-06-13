@@ -216,7 +216,7 @@ public final class Valid8orBuilder<T> implements Valid8orBuilderInterface<T> {
     this.pairLst.add(builder.rule(predicate)
         .ifNotThrow(exceptionFunction)
         .withMessage(message)
-        .build());
+        );
   }
 
   private List<ValidationRuleWithException<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> findFailedRules() {

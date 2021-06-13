@@ -36,7 +36,6 @@ public final class ValidationRuleWithException<R,E> {
 
     private R rule;
     private E exception;
-    private Function<String, String> message;
 
     ValidationRuleWithExceptionBuilder() {
     }
@@ -51,12 +50,7 @@ public final class ValidationRuleWithException<R,E> {
       return this;
     }
 
-    public ValidationRuleWithExceptionBuilder<R, E> withMessage(Function<String, String> message) {
-      this.message = message;
-      return this;
-    }
-
-    public ValidationRuleWithException<R, E> build() {
+    public ValidationRuleWithException<R, E> withMessage(Function<String, String> message) {
       return new ValidationRuleWithException<>(rule, exception, message);
     }
   }

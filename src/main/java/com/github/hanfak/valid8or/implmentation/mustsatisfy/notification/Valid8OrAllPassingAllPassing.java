@@ -123,8 +123,7 @@ public final class Valid8OrAllPassingAllPassing<T> implements Valid8orAllPassing
     ValidationRuleWithExceptionBuilder<Predicate<T>, Function<String, ? extends RuntimeException>> builder = create();
     this.pairLst.add(builder.rule(predicate)
         .ifNotThrow(exceptionFunction)
-        .withMessage(message)
-        .build());
+        .withMessage(message));
   }
 
   private List<ValidationRuleWithException<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> findFailedRules() {
