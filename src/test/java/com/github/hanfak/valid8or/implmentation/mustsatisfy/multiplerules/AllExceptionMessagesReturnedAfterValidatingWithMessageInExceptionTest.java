@@ -81,51 +81,51 @@ public class AllExceptionMessagesReturnedAfterValidatingWithMessageInExceptionTe
     assertThat(
         forInput(1)
             .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input")
+            .withMessage(input -> "Is not even, for input: " + input)
             .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-            .withMessage(input -> "Is not greater than 2, for input")
+            .withMessage(input -> "Is not greater than 2, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not greater than 2, for input", "Is not even, for input");
+    ).containsOnly("Is not greater than 2, for input: 1", "Is not even, for input: 1");
     assertThat(
         forInput(1)
             .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-            .withMessage(input -> "Is not greater than 2, for input")
+            .withMessage(input -> "Is not greater than 2, for input: " + input)
             .andSatisfies(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input")
+            .withMessage(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not greater than 2, for input", "Is not even, for input");
+    ).containsOnly("Is not greater than 2, for input: 1", "Is not even, for input: 1");
     assertThat(
         forInput(2)
             .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input")
+            .withMessage(input -> "Is not even, for input: " + input)
             .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-            .withMessage(input -> "Is not greater than 2, for input")
+            .withMessage(input -> "Is not greater than 2, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not greater than 2, for input");
+    ).containsOnly("Is not greater than 2, for input: 2");
     assertThat(
         forInput(2)
             .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-            .withMessage(input -> "Is not greater than 2, for input")
+            .withMessage(input -> "Is not greater than 2, for input: " + input)
             .andSatisfies(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input")
+            .withMessage(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not greater than 2, for input");
+    ).containsOnly("Is not greater than 2, for input: 2");
     assertThat(
         forInput(3)
             .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input")
+            .withMessage(input -> "Is not even, for input: " + input)
             .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-            .withMessage(input -> "Is not greater than 2, for input")
+            .withMessage(input -> "Is not greater than 2, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not even, for input");
+    ).containsOnly("Is not even, for input: 3");
     assertThat(
         forInput(3)
             .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-            .withMessage(input -> "Is not greater than 2, for input")
+            .withMessage(input -> "Is not greater than 2, for input: " + input)
             .andSatisfies(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input")
+            .withMessage(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not even, for input");
+    ).containsOnly("Is not even, for input: 3");
   }
 
   @Test
@@ -199,50 +199,50 @@ public class AllExceptionMessagesReturnedAfterValidatingWithMessageInExceptionTe
     assertThat(
         forInput(1)
             .mustSatisfy(isEven)
-            .butWas(input -> "Is not even, for input")
+            .butWas(input -> "Is not even, for input: " + input)
             .andSatisfies(isGreaterThan2)
-            .butWas(input -> "Is not greater than 2, for input")
+            .butWas(input -> "Is not greater than 2, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not greater than 2, for input", "Is not even, for input");
+    ).containsOnly("Is not greater than 2, for input: 1", "Is not even, for input: 1");
     assertThat(
         forInput(1)
             .mustSatisfy(isGreaterThan2)
-            .butWas(input -> "Is not greater than 2, for input")
+            .butWas(input -> "Is not greater than 2, for input: " + input)
             .andSatisfies(isEven)
-            .butWas(input -> "Is not even, for input")
+            .butWas(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not greater than 2, for input", "Is not even, for input");
+    ).containsOnly("Is not greater than 2, for input: 1", "Is not even, for input: 1");
     assertThat(
         forInput(2)
             .mustSatisfy(isEven)
-            .butWas(input -> "Is not even, for input")
+            .butWas(input -> "Is not even, for input: " + input)
             .andSatisfies(isGreaterThan2)
-            .butWas(input -> "Is not greater than 2, for input")
+            .butWas(input -> "Is not greater than 2, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not greater than 2, for input");
+    ).containsOnly("Is not greater than 2, for input: 2");
     assertThat(
         forInput(2)
             .mustSatisfy(isGreaterThan2)
-            .butWas(input -> "Is not greater than 2, for input")
+            .butWas(input -> "Is not greater than 2, for input: " + input)
             .andSatisfies(isEven)
-            .butWas(input -> "Is not even, for input")
+            .butWas(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not greater than 2, for input");
+    ).containsOnly("Is not greater than 2, for input: 2");
     assertThat(
         forInput(3)
             .mustSatisfy(isEven)
-            .butWas(input -> "Is not even, for input")
+            .butWas(input -> "Is not even, for input: " + input)
             .andSatisfies(isGreaterThan2)
-            .butWas(input -> "Is not greater than 2, for input")
+            .butWas(input -> "Is not greater than 2, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not even, for input");
+    ).containsOnly("Is not even, for input: 3");
     assertThat(
         forInput(3)
             .mustSatisfy(isGreaterThan2)
-            .butWas(input -> "Is not greater than 2, for input")
+            .butWas(input -> "Is not greater than 2, for input: " + input)
             .andSatisfies(isEven)
-            .butWas(input -> "Is not even, for input")
+            .butWas(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
-    ).containsOnly("Is not even, for input");
+    ).containsOnly("Is not even, for input: 3");
   }
 }

@@ -19,8 +19,6 @@ class ValidateWithMessageInExceptionTest extends TestFixtures {
               .mustSatisfy(isEven).orThrow(IllegalStateException::new)
               .withMessage(input -> "Is not even, for input: " + input)
               .validate()
-
-
       ).isEqualTo(4);
     }
 

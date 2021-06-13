@@ -42,18 +42,18 @@ public class ValidateWithMessageInExceptionReturnsOptionalTest extends TestFixtu
       assertThat(
           forInput(4)
               .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input" )
+              .withMessage(input -> "Is not even, for input: " + input )
               .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input")
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .validateThenReturnOptional()
       ).isPresent().containsInstanceOf(Integer.class).contains(4);
 
       assertThat(
           forInput(4)
               .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input")
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .andSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input")
+              .withMessage(input -> "Is not even, for input: " + input)
               .validateThenReturnOptional()
       ).isPresent().containsInstanceOf(Integer.class).contains(4);
     }
@@ -84,18 +84,18 @@ public class ValidateWithMessageInExceptionReturnsOptionalTest extends TestFixtu
       assertThat(
           forInput(4)
               .mustSatisfy(isEven)
-              .butWas(input -> "Is not even, for input")
+              .butWas(input -> "Is not even, for input: " + input)
               .andSatisfies(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input")
+              .butWas(input -> "Is not greater than 2, for input: " + input)
               .validateThenReturnOptional()
       ).isPresent().containsInstanceOf(Integer.class).contains(4);
 
       assertThat(
           forInput(4)
               .mustSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input")
+              .butWas(input -> "Is not greater than 2, for input: " + input)
               .andSatisfies(isEven)
-              .butWas(input -> "Is not even, for input")
+              .butWas(input -> "Is not even, for input: " + input)
               .validateThenReturnOptional()
       ).isPresent().containsInstanceOf(Integer.class).contains(4);
     }
@@ -187,53 +187,53 @@ public class ValidateWithMessageInExceptionReturnsOptionalTest extends TestFixtu
       assertThatThrownBy(() ->
           forInput(value)
               .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input" )
+              .withMessage(input -> "Is not even, for input: " + input )
               .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input")
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .validateThenReturnOptional()
       )
-          .hasMessage(format("Is not even, for input"))
+          .hasMessage("Is not even, for input: " + value)
           .isInstanceOf(IllegalStateException.class);
       assertThatThrownBy(() ->
           forInput(2)
               .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input" )
+              .withMessage(input -> "Is not even, for input: " + input )
               .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input")
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .validateThenReturnOptional()
       )
-          .hasMessage(format("Is not greater than 2, for input"))
+          .hasMessage("Is not greater than 2, for input: 2")
           .isInstanceOf(IllegalArgumentException.class);
 
       assertThatThrownBy(() ->
           forInput(3)
               .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input")
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .andSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input")
+              .withMessage(input -> "Is not even, for input: " + input)
               .validateThenReturnOptional()
       )
-          .hasMessage(format("Is not even, for input"))
+          .hasMessage("Is not even, for input: 3")
           .isInstanceOf(IllegalStateException.class);
       assertThatThrownBy(() ->
           forInput(2)
               .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input")
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .andSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input")
+              .withMessage(input -> "Is not even, for input: " + input)
               .validateThenReturnOptional()
       )
-          .hasMessage(format("Is not greater than 2, for input"))
+          .hasMessage("Is not greater than 2, for input: 2")
           .isInstanceOf(IllegalArgumentException.class);
       assertThatThrownBy(() ->
           forInput(1)
               .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input")
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .andSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input")
+              .withMessage(input -> "Is not even, for input: " + input)
               .validateThenReturnOptional()
       )
-          .hasMessage(format("Is not greater than 2, for input"))
+          .hasMessage("Is not greater than 2, for input: 1")
           .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -299,53 +299,53 @@ public class ValidateWithMessageInExceptionReturnsOptionalTest extends TestFixtu
       assertThatThrownBy(() ->
           forInput(value)
               .mustSatisfy(isEven)
-              .butWas(input -> "Is not even, for input")
+              .butWas(input -> "Is not even, for input: " + input)
               .andSatisfies(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input")
+              .butWas(input -> "Is not greater than 2, for input: " + input)
               .validateThenReturnOptional()
       )
-          .hasMessage(format("Is not even, for input"))
+          .hasMessage("Is not even, for input: " + value)
           .isInstanceOf(ValidationException.class);
       assertThatThrownBy(() ->
           forInput(2)
               .mustSatisfy(isEven)
-              .butWas(input -> "Is not even, for input")
+              .butWas(input -> "Is not even, for input: " + input)
               .andSatisfies(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input")
+              .butWas(input -> "Is not greater than 2, for input: " + input)
               .validateThenReturnOptional()
       )
-          .hasMessage(format("Is not greater than 2, for input"))
+          .hasMessage("Is not greater than 2, for input: 2")
           .isInstanceOf(ValidationException.class);
 
       assertThatThrownBy(() ->
           forInput(3)
               .mustSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input")
+              .butWas(input -> "Is not greater than 2, for input: " + input)
               .andSatisfies(isEven)
-              .butWas(input -> "Is not even, for input")
+              .butWas(input -> "Is not even, for input: " + input)
               .validateThenReturnOptional()
       )
-          .hasMessage(format("Is not even, for input"))
+          .hasMessage("Is not even, for input: 3")
           .isInstanceOf(ValidationException.class);
       assertThatThrownBy(() ->
           forInput(2)
               .mustSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input")
+              .butWas(input -> "Is not greater than 2, for input: " + input)
               .andSatisfies(isEven)
-              .butWas(input -> "Is not even, for input")
+              .butWas(input -> "Is not even, for input: " + input)
               .validateThenReturnOptional()
       )
-          .hasMessage("Is not greater than 2, for input")
+          .hasMessage("Is not greater than 2, for input: 2")
           .isInstanceOf(ValidationException.class);
       assertThatThrownBy(() ->
           forInput(1)
               .mustSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input")
+              .butWas(input -> "Is not greater than 2, for input: " + input)
               .andSatisfies(isEven)
-              .butWas(input -> "Is not even, for input")
+              .butWas(input -> "Is not even, for input: " + input)
               .validateThenReturnOptional()
       )
-          .hasMessage(format("Is not greater than 2, for input"))
+          .hasMessage("Is not greater than 2, for input: 1")
           .isInstanceOf(ValidationException.class);
     }
 

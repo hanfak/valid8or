@@ -52,7 +52,8 @@ public class ValidateWithMessageInExceptionUsingConsumerTest extends TestFixture
           .isInstanceOf(IllegalStateException.class)
           .hasMessage("Is not even, for input: 3");
       assertThat(stubLogger.lastLogEventMessage())
-          .isEqualTo("For input '3', was not valid because: 'Is not even, for input: 3'");    }
+          .isEqualTo("For input '3', was not valid because: 'Is not even, for input: 3'");
+    }
 
     @Test
     void usingCustomMessageAndNoCustomExceptionAndConsumerWillThrowValidationException() {
@@ -69,6 +70,7 @@ public class ValidateWithMessageInExceptionUsingConsumerTest extends TestFixture
           .isInstanceOf(ValidationException.class)
           .hasMessage("Is not even, for input: 3");
       assertThat(stubLogger.lastLogEventMessage())
-          .isEqualTo("For input '3', was not valid because: 'Is not even, for input: 3'");    }
+          .isEqualTo("For input '3', was not valid because: 'Is not even, for input: 3'");
+    }
   }
 }
