@@ -36,7 +36,7 @@ Add the dependency
 <dependency>
   <groupId>com.github.hanfak</groupId>
   <artifactId>valid8or</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.3</version>
 </dependency>
 ```
 
