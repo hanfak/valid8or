@@ -42,4 +42,10 @@ Add the dependency
 
 ## How to use 
 
-See [wiki](https://github.com/hanfak/valid8or/wiki)
+See test for examples of how to use
+
+See [wiki](https://github.com/hanfak/valid8or/wiki) for more information and examples
+
+## sonarcloud 
+
+https://sonarcloud.io/dashboard?id=hanfak_valid8or
