@@ -12,7 +12,7 @@ import java.util.Optional;
 import static com.github.hanfak.valid8or.api.Valid8orCouldSatisfyAllRules.forInput;
 import static java.lang.String.format;
 
-public class ValidateWithMessageInExceptionWithConsumerReturnsOptionalTest extends TestFixtures {
+class ValidateWithMessageInExceptionWithConsumerReturnsOptionalTest extends TestFixtures {
 
   @Nested
   class ReturnsInputAsOptionalAndNoExceptionThrownOrConsumerUsedWhenInputIsValid {

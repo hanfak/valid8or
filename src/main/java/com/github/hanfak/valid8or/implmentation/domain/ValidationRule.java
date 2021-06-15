@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 // tODO use effective java builder pattern
 @EqualsAndHashCode
@@ -14,13 +15,13 @@ public final class ValidationRule<R,E> {
   private final E exception;
   private final Function<String, String> message;
 
-  private ValidationRule(R rule, E exception, Function<String, String> message) {
+  private ValidationRule(R rule, E exception, UnaryOperator<String> message) {
     this.rule = rule;
     this.exception = exception;
     this.message = message;
   }
 
-  public static <R, E> ValidationRule<R, E> rule(R rule, E exception, Function<String, String> message) {
+  public static <R, E> ValidationRule<R, E> rule(R rule, E exception, UnaryOperator<String> message) {
     return new ValidationRule<>(rule, exception, message);
   }
 
@@ -50,7 +51,7 @@ public final class ValidationRule<R,E> {
       return this;
     }
 
-    public ValidationRule<R, E> withMessage(Function<String, String> message) {
+    public ValidationRule<R, E> withMessage(UnaryOperator<String> message) {
       return new ValidationRule<>(rule, exception, message);
     }
   }

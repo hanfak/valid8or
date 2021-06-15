@@ -7,7 +7,7 @@ import testinfrastructure.TestFixtures;
 
 import static com.github.hanfak.valid8or.api.Valid8orMustSatisfyAllRules.forInput;
 
-public class ValidateWithMessageInExceptionReturnsOptionalTest extends TestFixtures {
+class ValidateWithMessageInExceptionReturnsOptionalTest extends TestFixtures {
   @Nested
   class ReturnsInputAsOptionalAndNoExceptionThrownWhenInputIsValid {
 

@@ -7,7 +7,7 @@ import testinfrastructure.TestFixtures;
 
 import static com.github.hanfak.valid8or.api.Valid8orMustSatisfyAllRules.forInput;
 
-public class ValidateWithMessageInExceptionWithConsumerReturnsOptionalTest extends TestFixtures {
+class ValidateWithMessageInExceptionWithConsumerReturnsOptionalTest extends TestFixtures {
   // TODO: Test where input from lambda arg is not used
   // TODO: Test where input from lambda arg is not used, but variable is
   @Nested

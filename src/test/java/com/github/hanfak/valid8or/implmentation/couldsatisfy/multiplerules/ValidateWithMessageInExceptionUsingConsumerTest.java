@@ -9,7 +9,7 @@ import testinfrastructure.TestFixtures;
 
 import static com.github.hanfak.valid8or.api.Valid8orCouldSatisfyAllRules.forInput;
 
-public class ValidateWithMessageInExceptionUsingConsumerTest extends TestFixtures {
+class ValidateWithMessageInExceptionUsingConsumerTest extends TestFixtures {
 
   @Nested
   class ReturnsInputAndNoExceptionThrownOrConsumerUsedWhenInputIsValid {

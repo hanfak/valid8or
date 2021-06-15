@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import static com.github.hanfak.valid8or.api.Valid8orCouldSatisfyAllRules.forInput;
 
-public class ValidateWithMessageInExceptionReturnsOptionalTest extends TestFixtures {
+class ValidateWithMessageInExceptionReturnsOptionalTest extends TestFixtures {
 
   @Nested
   class ReturnsInputAsOptionalAndNoExceptionThrownWhenInputIsValid {

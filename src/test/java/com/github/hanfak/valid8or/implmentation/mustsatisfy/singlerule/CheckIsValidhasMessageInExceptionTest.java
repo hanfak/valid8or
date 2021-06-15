@@ -6,7 +6,7 @@ import testinfrastructure.TestFixtures;
 import static com.github.hanfak.valid8or.api.Valid8orMustSatisfyAllRules.forInput;
 
 // No use of consumer or exception thrown
-public class CheckIsValidhasMessageInExceptionTest extends TestFixtures {
+class CheckIsValidhasMessageInExceptionTest extends TestFixtures {
   // TODO paramtise for true/false assertion
 
   @Test

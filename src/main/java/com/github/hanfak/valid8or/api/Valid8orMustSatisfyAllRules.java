@@ -10,7 +10,7 @@ public class Valid8orMustSatisfyAllRules {
   }
 
   public static <T> Satisfy<T> forInput(T input) {
-    return new Valid8OrMustSatisfyAllRulesBuilder<T>(new ValidationRules<T>())
+    return new Valid8OrMustSatisfyAllRulesBuilder<>(new ValidationRules<T>())
         .forInput(input);
   }
 }

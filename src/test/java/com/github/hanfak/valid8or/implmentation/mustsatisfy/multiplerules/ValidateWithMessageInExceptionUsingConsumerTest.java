@@ -10,7 +10,7 @@ import testinfrastructure.TestFixtures;
 import static com.github.hanfak.valid8or.api.Valid8orMustSatisfyAllRules.forInput;
 import static java.lang.String.format;
 
-public class ValidateWithMessageInExceptionUsingConsumerTest extends TestFixtures {
+class ValidateWithMessageInExceptionUsingConsumerTest extends TestFixtures {
   // TODO separate tests with in tests
   @Nested
   class ReturnsInputAndNoExceptionThrownOrConsumerUsedWhenInputIsValid {

@@ -6,7 +6,7 @@ import testinfrastructure.TestFixtures;
 
 import static com.github.hanfak.valid8or.api.Valid8orMustSatisfyAllRules.forInput;
 
-public class Valid8orMustSatisfyHandlingNullInputTest extends TestFixtures {
+class Valid8orMustSatisfyHandlingNullInputTest extends TestFixtures {
   @Test
   void validateThenReturnOptionalWrapsValidatedInputWithOptional() {
     assertThat(
