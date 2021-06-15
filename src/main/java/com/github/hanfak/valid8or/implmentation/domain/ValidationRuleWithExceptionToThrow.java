@@ -8,20 +8,20 @@ import java.util.function.Function;
 // tODO use effective java builder pattern
 @EqualsAndHashCode
 @Getter
-public final class ValidationRuleWithException<R,E> {
+public final class ValidationRuleWithExceptionToThrow<R,E> {
 
   private final R rule;
   private final E exception;
   private final Function<String, String> message;
 
-  private ValidationRuleWithException(R rule, E exception, Function<String, String> message) {
+  private ValidationRuleWithExceptionToThrow(R rule, E exception, Function<String, String> message) {
     this.rule = rule;
     this.exception = exception;
     this.message = message;
   }
 
-  public static <R, E> ValidationRuleWithException<R, E> rule(R rule, E exception, Function<String, String> message) {
-    return new ValidationRuleWithException<>(rule, exception, message);
+  public static <R, E> ValidationRuleWithExceptionToThrow<R, E> rule(R rule, E exception, Function<String, String> message) {
+    return new ValidationRuleWithExceptionToThrow<>(rule, exception, message);
   }
 
   public static <R, E> ValidationRuleWithExceptionBuilder<R, E> create() {
@@ -50,8 +50,8 @@ public final class ValidationRuleWithException<R,E> {
       return this;
     }
 
-    public ValidationRuleWithException<R, E> withMessage(Function<String, String> message) {
-      return new ValidationRuleWithException<>(rule, exception, message);
+    public ValidationRuleWithExceptionToThrow<R, E> withMessage(Function<String, String> message) {
+      return new ValidationRuleWithExceptionToThrow<>(rule, exception, message);
     }
   }
 }

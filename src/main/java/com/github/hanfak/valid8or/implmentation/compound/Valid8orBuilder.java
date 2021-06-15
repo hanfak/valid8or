@@ -4,14 +4,14 @@ import com.github.hanfak.valid8or.implmentation.domain.ExceptionAndInput;
 import com.github.hanfak.valid8or.implmentation.domain.ValidationException;
 import com.github.hanfak.valid8or.implmentation.domain.ValidationPair;
 import com.github.hanfak.valid8or.implmentation.domain.ValidationPair.ValidationPairBuilder;
-import com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithException;
-import com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithException.ValidationRuleWithExceptionBuilder;
+import com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow;
+import com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow.ValidationRuleWithExceptionBuilder;
 
 import java.util.*;
 import java.util.function.*;
 
 import static com.github.hanfak.valid8or.implmentation.domain.ValidationPair.builder;
-import static com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithException.create;
+import static com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow.create;
 import static java.lang.String.format;
 import static java.util.Collections.emptySet;
 import static java.util.function.Predicate.not;
@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toSet;
 
 public final class Valid8orBuilder<T> implements Valid8orBuilderInterface<T> {
 
-  private final List<ValidationRuleWithException<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> pairLst = new ArrayList<>();
+  private final List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> pairLst = new ArrayList<>();
   private final List<ValidationPair<Predicate<T>, ? extends Supplier<? extends RuntimeException>>> otherPairList = new ArrayList<>();
 
   private T input;
@@ -219,7 +219,7 @@ public final class Valid8orBuilder<T> implements Valid8orBuilderInterface<T> {
         );
   }
 
-  private List<ValidationRuleWithException<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> findFailedRules() {
+  private List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> findFailedRules() {
     return pairLst.stream()
         .filter(not(x1 -> x1.getRule().test(this.input)))
         .collect(toList());
@@ -237,9 +237,9 @@ public final class Valid8orBuilder<T> implements Valid8orBuilderInterface<T> {
         .collect(toList());
   }
 
-  private String createAllExceptionMessage(List<ValidationRuleWithException<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+  private String createAllExceptionMessage(List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
     return failedRules.stream()
-        .map(ValidationRuleWithException::getMessage)
+        .map(ValidationRuleWithExceptionToThrow::getMessage)
         .map(x -> x.apply(input.toString()))
         .distinct()
         .collect(joining(", "));
@@ -252,9 +252,9 @@ public final class Valid8orBuilder<T> implements Valid8orBuilderInterface<T> {
         .collect(joining(", "));
   }
 
-  private Set<String> createListOfAllExceptionMessages(List<ValidationRuleWithException<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+  private Set<String> createListOfAllExceptionMessages(List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
     return failedRules.stream()
-        .map(ValidationRuleWithException::getMessage)
+        .map(ValidationRuleWithExceptionToThrow::getMessage)
 //        .map(x -> x == null ?  "null" : x)
         .map(x -> x.apply(input.toString()))
         .collect(toSet());
@@ -270,7 +270,7 @@ public final class Valid8orBuilder<T> implements Valid8orBuilderInterface<T> {
         .collect(toSet());
   }
 
-  private void consumeThenThrow(List<ValidationRuleWithException<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules, Consumer<ValidationRuleWithException<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> action) {
+  private void consumeThenThrow(List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules, Consumer<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> action) {
     try {
       var failedRulesWithDefinedExceptions = failedRules.stream().findAny();
       if (failedRulesWithDefinedExceptions.filter(x -> Objects.isNull(x.getException())).isPresent()) {
@@ -302,7 +302,7 @@ public final class Valid8orBuilder<T> implements Valid8orBuilderInterface<T> {
     }
   }
 
-  private Consumer<ValidationRuleWithException<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> throwException() {
+  private Consumer<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> throwException() {
     return predicateValidationRule -> {
       throw predicateValidationRule.getException()
           .compose(predicateValidationRule.getMessage())
