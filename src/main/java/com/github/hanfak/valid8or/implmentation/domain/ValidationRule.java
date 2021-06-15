@@ -3,26 +3,29 @@ package com.github.hanfak.valid8or.implmentation.domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.util.function.Function;
+
 // tODO use effective java builder pattern
 @EqualsAndHashCode
 @Getter
 public final class ValidationRule<R,E> {
+
   private final R rule;
   private final E exception;
-  private final String message;
+  private final Function<String, String> message;
 
-  private ValidationRule(R rule, E exception, String message) {
+  private ValidationRule(R rule, E exception, Function<String, String> message) {
     this.rule = rule;
     this.exception = exception;
     this.message = message;
   }
 
-  public static <R, E> ValidationRule<R, E> rule(R rule, E exception, String message) {
-    return new ValidationRule<R, E>(rule, exception, message);
+  public static <R, E> ValidationRule<R, E> rule(R rule, E exception, Function<String, String> message) {
+    return new ValidationRule<>(rule, exception, message);
   }
 
-  public static <R, E> ValidationRuleBuilder<R, E> rule() {
-    return new ValidationRuleBuilder<R, E>();
+  public static <R, E> ValidationRuleBuilder<R, E> create() {
+    return new ValidationRuleBuilder<>();
   }
 
   public static <R, E> ValidationRuleBuilder<R, E> rule(R rule) {
@@ -30,9 +33,9 @@ public final class ValidationRule<R,E> {
   }
 
   public static class ValidationRuleBuilder<R, E> {
+
     private R rule;
     private E exception;
-    private String message;
 
     ValidationRuleBuilder() {
     }
@@ -47,13 +50,8 @@ public final class ValidationRule<R,E> {
       return this;
     }
 
-    public ValidationRuleBuilder<R, E> withMessage(String message) {
-      this.message = message;
-      return this;
-    }
-
-    public ValidationRule<R, E> build() {
-      return new ValidationRule<R, E>(rule, exception, message);
+    public ValidationRule<R, E> withMessage(Function<String, String> message) {
+      return new ValidationRule<>(rule, exception, message);
     }
   }
 }

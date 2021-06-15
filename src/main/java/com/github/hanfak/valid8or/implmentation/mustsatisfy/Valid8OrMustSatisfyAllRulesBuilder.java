@@ -1,10 +1,10 @@
 package com.github.hanfak.valid8or.implmentation.mustsatisfy;
 
 import com.github.hanfak.valid8or.implmentation.domain.ExceptionAndInput;
-import com.github.hanfak.valid8or.implmentation.domain.Rules;
+import com.github.hanfak.valid8or.implmentation.domain.ValidationRules;
 import com.github.hanfak.valid8or.implmentation.domain.ValidationException;
-import com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow;
-import com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow.ValidationRuleWithExceptionBuilder;
+import com.github.hanfak.valid8or.implmentation.domain.ValidationRule;
+import com.github.hanfak.valid8or.implmentation.domain.ValidationRule.ValidationRuleBuilder;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import static com.github.hanfak.valid8or.implmentation.commons.Utils.check;
-import static com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow.create;
+import static com.github.hanfak.valid8or.implmentation.domain.ValidationRule.create;
 import static java.util.Optional.empty;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
@@ -26,10 +26,10 @@ public final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8orMust
   private Function<String, ? extends RuntimeException> exceptionFunction;
   private Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer = empty();
 
-  private final Rules<T> rules;
+  private final ValidationRules<T> validationRules;
 
-  public Valid8OrMustSatisfyAllRulesBuilder(Rules<T> rules) {
-    this.rules = rules;
+  public Valid8OrMustSatisfyAllRulesBuilder(ValidationRules<T> validationRules) {
+    this.validationRules = validationRules;
   }
 
   @Override
@@ -112,9 +112,9 @@ public final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8orMust
   }
 
   private void buildRule(final UnaryOperator<String> message) {
-    ValidationRuleWithExceptionBuilder<Predicate<T>, Function<String, ? extends RuntimeException>>
+    ValidationRuleBuilder<Predicate<T>, Function<String, ? extends RuntimeException>>
         builder = create();
-    rules.add(builder.rule(this.predicate)
+    validationRules.add(builder.rule(this.predicate)
         .ifNotThrow(this.exceptionFunction)
         .withMessage(message));
   }
@@ -124,16 +124,16 @@ public final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8orMust
     return this.input;
   }
 
-  private List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
+  private List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
   findFailedRules() {
-    return rules.getRules()
+    return validationRules.getRules()
         .filter(not(x1 -> x1.getRule().test(this.input)))
         .collect(toList());
   }
 
   private void
-  consumeThenThrow(final List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules,
-                   final Consumer<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> action) {
+  consumeThenThrow(final List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules,
+                   final Consumer<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> action) {
     try {
       failedRules.stream().findAny().ifPresent(action);
     } catch (RuntimeException e) {
@@ -142,7 +142,7 @@ public final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8orMust
     }
   }
 
-  private Consumer<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
+  private Consumer<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
   throwException() {
     return predicateValidationRule -> {
       throw predicateValidationRule.getException()
@@ -152,9 +152,9 @@ public final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8orMust
   }
 
   private Set<String>
-  createListOfAllExceptionMessages(final List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+  createListOfAllExceptionMessages(final List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
     return failedRules.stream()
-        .map(ValidationRuleWithExceptionToThrow::getMessage)
+        .map(ValidationRule::getMessage)
         .map(messageFunction -> messageFunction.apply(nullSafeInput()))
         .collect(toSet());
   }

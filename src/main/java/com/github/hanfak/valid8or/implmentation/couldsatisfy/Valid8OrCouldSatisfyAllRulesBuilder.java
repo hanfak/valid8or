@@ -1,10 +1,10 @@
 package com.github.hanfak.valid8or.implmentation.couldsatisfy;
 
 import com.github.hanfak.valid8or.implmentation.domain.ExceptionAndInput;
-import com.github.hanfak.valid8or.implmentation.domain.Rules;
+import com.github.hanfak.valid8or.implmentation.domain.ValidationRules;
 import com.github.hanfak.valid8or.implmentation.domain.ValidationException;
-import com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow;
-import com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow.ValidationRuleWithExceptionBuilder;
+import com.github.hanfak.valid8or.implmentation.domain.ValidationRule;
+import com.github.hanfak.valid8or.implmentation.domain.ValidationRule.ValidationRuleBuilder;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import static com.github.hanfak.valid8or.implmentation.commons.Utils.check;
-import static com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow.create;
+import static com.github.hanfak.valid8or.implmentation.domain.ValidationRule.create;
 import static java.util.Collections.emptySet;
 import static java.util.Optional.empty;
 import static java.util.function.Predicate.not;
@@ -27,10 +27,10 @@ public final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8orCou
   private Function<String, ? extends RuntimeException> exceptionFunction;
   private Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer = empty();
 
-  private final Rules<T> rules;
+  private final ValidationRules<T> validationRules;
 
-  public Valid8OrCouldSatisfyAllRulesBuilder(Rules<T> rules) {
-    this.rules = rules;
+  public Valid8OrCouldSatisfyAllRulesBuilder(ValidationRules<T> validationRules) {
+    this.validationRules = validationRules;
   }
 
   @Override
@@ -95,7 +95,7 @@ public final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8orCou
   @Override
   public Set<String> allExceptionMessages() {
     var failedRules = findFailedRules();
-    if (failedRules.size() == rules.size()) {
+    if (failedRules.size() == validationRules.size()) {
       return createListOfAllExceptionMessages(failedRules);
     }
     return emptySet();
@@ -103,7 +103,7 @@ public final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8orCou
 
   @Override
   public boolean isValid() {
-    return findFailedRules().size() != rules.size();
+    return findFailedRules().size() != validationRules.size();
   }
 
   @Override
@@ -112,32 +112,32 @@ public final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8orCou
   }
 
   private void buildRule(UnaryOperator<String> message) {
-    ValidationRuleWithExceptionBuilder<Predicate<T>, Function<String, ? extends RuntimeException>> builder = create();
-    ValidationRuleWithExceptionToThrow<Predicate<T>, Function<String, ? extends RuntimeException>> e = builder.rule(predicate)
+    ValidationRuleBuilder<Predicate<T>, Function<String, ? extends RuntimeException>> builder = create();
+    ValidationRule<Predicate<T>, Function<String, ? extends RuntimeException>> e = builder.rule(predicate)
         .ifNotThrow(exceptionFunction)
         .withMessage(message);
-    rules.add(e);
+    validationRules.add(e);
   }
 
-  private List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
+  private List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
   findFailedRules() {
-    return rules.getRules()
+    return validationRules.getRules()
         .filter(not(x1 -> x1.getRule().test(input)))
         .collect(toList());
   }
 
   private Set<String> createListOfAllExceptionMessages(
-      List<ValidationRuleWithExceptionToThrow<Predicate<T>,
-            ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+      List<ValidationRule<Predicate<T>,
+                  ? extends Function<String, ? extends RuntimeException>>> failedRules) {
     return failedRules.stream()
-        .map(ValidationRuleWithExceptionToThrow::getMessage)
+        .map(ValidationRule::getMessage)
         .map(messageFunction -> messageFunction.apply(nullSafeInput()))
         .collect(toSet());
   }
 
   private void consumeThenThrow(
-      List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules,
-      Consumer<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> action) {
+      List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules,
+      Consumer<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> action) {
     try {
       failedRules.stream().findAny().ifPresent(action);
     } catch (RuntimeException e) {
@@ -146,7 +146,7 @@ public final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8orCou
     }
   }
 
-  private Consumer<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
+  private Consumer<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
   throwException() {
     return predicateValidationRule -> {
       throw predicateValidationRule.getException()
@@ -161,7 +161,7 @@ public final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8orCou
 
   private T validateWithCustomMessage() {
     var failedRules = findFailedRules();
-    if (failedRules.size() == rules.size()) {
+    if (failedRules.size() == validationRules.size()) {
       consumeThenThrow(failedRules, throwException());
     }
     return input;

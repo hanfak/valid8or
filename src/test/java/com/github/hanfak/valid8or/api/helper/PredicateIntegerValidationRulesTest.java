@@ -5,7 +5,7 @@ import testinfrastructure.TestFixtures;
 
 import static com.github.hanfak.valid8or.api.helper.PredicateIntegerRules.isZero;
 
-class PredicateIntegerRulesTest extends TestFixtures {
+class PredicateIntegerValidationRulesTest extends TestFixtures {
 
   @Test
   void returnsBooleanWhenInputIsZero() {
