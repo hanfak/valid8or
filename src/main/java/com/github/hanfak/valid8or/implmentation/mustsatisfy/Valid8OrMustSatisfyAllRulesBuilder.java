@@ -1,6 +1,7 @@
 package com.github.hanfak.valid8or.implmentation.mustsatisfy;
 
 import com.github.hanfak.valid8or.implmentation.domain.ExceptionAndInput;
+import com.github.hanfak.valid8or.implmentation.domain.Rules;
 import com.github.hanfak.valid8or.implmentation.domain.ValidationException;
 import com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow;
 import com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow.ValidationRuleWithExceptionBuilder;
@@ -11,6 +12,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+import static com.github.hanfak.valid8or.implmentation.commons.Utils.check;
 import static com.github.hanfak.valid8or.implmentation.domain.ValidationRuleWithExceptionToThrow.create;
 import static java.util.Optional.empty;
 import static java.util.function.Predicate.not;
@@ -19,13 +21,16 @@ import static java.util.stream.Collectors.toSet;
 
 public final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8orMustSatisfyAllRulesBuilderFlow<T> {
 
-  private final List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
-      validationRuleWithExceptionToThrows = new ArrayList<>();
-
   private T input;
   private Predicate<T> predicate;
   private Function<String, ? extends RuntimeException> exceptionFunction;
   private Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer = empty();
+
+  private final Rules<T> rules;
+
+  public Valid8OrMustSatisfyAllRulesBuilder(Rules<T> rules) {
+    this.rules = rules;
+  }
 
   @Override
   public Satisfy<T> forInput(final T input) {
@@ -68,7 +73,7 @@ public final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8orMust
   // TODO Do i need this??? Will need better name ie because?since?
   @Override
   public ConnectorOrValidate<T> butWas(final UnaryOperator<String> messageFunction) {
-    this.exceptionFunction = ValidationException::new;
+    exceptionFunction = ValidationException::new;
     withMessage(messageFunction);
     return this;
   }
@@ -76,7 +81,7 @@ public final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8orMust
   @Override
   public ConsumerTerminal<T> thenConsume(final Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer) {
     check(Objects.isNull(consumer), "A consumer must not be provided");
-    this.optionalConsumer = Optional.of(consumer);
+    optionalConsumer = Optional.of(consumer);
     return this;
   }
 
@@ -106,16 +111,10 @@ public final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8orMust
     return !isValid();
   }
 
-  private void check(final boolean argIsNull, final String message) {
-    if (argIsNull) {
-      throw new IllegalArgumentException(message);
-    }
-  }
-
   private void buildRule(final UnaryOperator<String> message) {
     ValidationRuleWithExceptionBuilder<Predicate<T>, Function<String, ? extends RuntimeException>>
         builder = create();
-    this.validationRuleWithExceptionToThrows.add(builder.rule(this.predicate)
+    rules.add(builder.rule(this.predicate)
         .ifNotThrow(this.exceptionFunction)
         .withMessage(message));
   }
@@ -127,7 +126,7 @@ public final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8orMust
 
   private List<ValidationRuleWithExceptionToThrow<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
   findFailedRules() {
-    return this.validationRuleWithExceptionToThrows.stream()
+    return rules.getRules()
         .filter(not(x1 -> x1.getRule().test(this.input)))
         .collect(toList());
   }
