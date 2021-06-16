@@ -1,6 +1,5 @@
 package testinfrastructure;
 
-import com.github.hanfak.valid8or.implmentation.domain.ExceptionAndInput;
 import org.assertj.core.api.WithAssertions;
 
 import java.util.function.Function;

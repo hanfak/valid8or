@@ -1,6 +1,6 @@
 package testinfrastructure;
 
-import com.github.hanfak.valid8or.implmentation.domain.ExceptionAndInput;
+import com.github.hanfak.valid8or.implmentation.ExceptionAndInput;
 
 import java.util.LinkedList;
 import java.util.Queue;
