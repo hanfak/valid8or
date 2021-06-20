@@ -3,10 +3,7 @@ package com.github.hanfak.valid8or.implmentation;
 import com.github.hanfak.valid8or.implmentation.ValidationRule.ValidationRuleBuilder;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
+import java.util.function.*;
 
 import static com.github.hanfak.valid8or.implmentation.Utils.check;
 import static com.github.hanfak.valid8or.implmentation.ValidationRule.create;
@@ -75,6 +72,16 @@ final class Valid8OrCouldCouldSatisfyAllRulesBuilderCould<T> implements Valid8Or
     check(Objects.isNull(consumer), "A consumer must not be provided");
     optionalConsumer = Optional.of(consumer);
     return this;
+  }
+
+  @Override
+  public T validateOrThrowNotify() {
+    return null;
+  }
+
+  @Override
+  public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction, BiFunction<T, String, String> message) {
+    return null;
   }
 
   @Override

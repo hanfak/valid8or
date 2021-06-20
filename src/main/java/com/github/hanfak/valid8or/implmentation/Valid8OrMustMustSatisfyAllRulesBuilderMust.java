@@ -3,15 +3,14 @@ package com.github.hanfak.valid8or.implmentation;
 import com.github.hanfak.valid8or.implmentation.ValidationRule.ValidationRuleBuilder;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
+import java.util.function.*;
 
 import static com.github.hanfak.valid8or.implmentation.Utils.check;
 import static com.github.hanfak.valid8or.implmentation.ValidationRule.create;
+import static java.lang.String.format;
 import static java.util.Optional.empty;
 import static java.util.function.Predicate.not;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -79,6 +78,32 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     check(Objects.isNull(consumer), "A consumer must not be provided");
     optionalConsumer = Optional.of(consumer);
     return this;
+  }
+
+  @Override
+  public T validateOrThrowNotify() {
+    var failedRules = findFailedRules();
+    if (!failedRules.isEmpty()) {
+      var allExceptionMessages = createAllExceptionMessages(failedRules);
+      var exceptionMessage = format("For input: '%s', the following problems occurred: '%s'", input, allExceptionMessages);
+      var validationException = new ExceptionAndInput<>(new ValidationException(exceptionMessage), exceptionMessage, input);
+      optionalConsumer.ifPresent(con -> con.accept(validationException));
+      throw validationException.getException();
+    }
+    return input;
+  }
+
+  @Override
+  public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction, BiFunction<T, String, String> message) {
+    var failedRules = findFailedRules();
+    if (!failedRules.isEmpty()) {
+      var allExceptionMessages = createAllExceptionMessages(failedRules);
+      var runtimeException = message.andThen(exceptionFunction).apply(input, allExceptionMessages);
+      var customValidationException = new ExceptionAndInput<>(runtimeException, runtimeException.getMessage(), input);
+      optionalConsumer.ifPresent(con -> con.accept(customValidationException));
+      throw runtimeException;
+    }
+    return input;
   }
 
   @Override
@@ -157,5 +182,22 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
 
   private String nullSafeInput() {
     return Objects.isNull(this.input) ? null : this.input.toString();
+  }
+
+  private Consumer<String>
+  customValidationExceptionMessage(
+      Function<String, ? extends RuntimeException> exceptionFunction,
+      BiFunction<T, String, String> message) {
+    return validationMessages -> {
+      throw message.andThen(exceptionFunction).apply(input, validationMessages);
+    };
+  }
+
+  private String createAllExceptionMessages(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+    return failedRules.stream()
+        .map(ValidationRule::getMessage)
+        .map(x -> x.apply(input.toString()))
+        .distinct()
+        .collect(joining(", "));
   }
 }
