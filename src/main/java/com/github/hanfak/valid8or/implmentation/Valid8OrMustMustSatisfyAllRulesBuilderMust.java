@@ -2,7 +2,10 @@ package com.github.hanfak.valid8or.implmentation;
 
 import com.github.hanfak.valid8or.implmentation.ValidationRule.ValidationRuleBuilder;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.*;
 
 import static com.github.hanfak.valid8or.implmentation.Utils.check;
@@ -33,9 +36,10 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     return this;
   }
 
-  /** TODO change name:
-   *  isValidFor(), holdsFor(), holdsForRule()
-   *  validForRule()
+  /**
+   * TODO change name:
+   * isValidFor(), holdsFor(), holdsForRule()
+   * validForRule()
    */
   @Override
   public MustThrowException<T> mustSatisfy(final Predicate<T> predicate) {
@@ -84,23 +88,21 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   public T validateOrThrowNotify() {
     var failedRules = findFailedRules();
     if (!failedRules.isEmpty()) {
-      var allExceptionMessages = createAllExceptionMessages(failedRules);
-      var exceptionMessage = format("For input: '%s', the following problems occurred: '%s'", input, allExceptionMessages);
-      var validationException = new ExceptionAndInput<>(new ValidationException(exceptionMessage), exceptionMessage, input);
-      optionalConsumer.ifPresent(con -> con.accept(validationException));
+      String exceptionMessage = getExceptionMessage(failedRules);
+      var validationException = createExceptionAndInput(new ValidationException(exceptionMessage));
+      optionalConsumer.ifPresent(con -> con.accept(createExceptionAndInput(new ValidationException(exceptionMessage))));
       throw validationException.getException();
     }
     return input;
   }
 
   @Override
-  public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction, BiFunction<T, String, String> message) {
+  public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
+                                 BiFunction<T, String, String> message) {
     var failedRules = findFailedRules();
     if (!failedRules.isEmpty()) {
-      var allExceptionMessages = createAllExceptionMessages(failedRules);
-      var runtimeException = message.andThen(exceptionFunction).apply(input, allExceptionMessages);
-      var customValidationException = new ExceptionAndInput<>(runtimeException, runtimeException.getMessage(), input);
-      optionalConsumer.ifPresent(con -> con.accept(customValidationException));
+      RuntimeException runtimeException = createCustomNotificationException(exceptionFunction, message, failedRules);
+      optionalConsumer.ifPresent(con -> con.accept(createExceptionAndInput(runtimeException)));
       throw runtimeException;
     }
     return input;
@@ -158,7 +160,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     try {
       failedRules.stream().findAny().ifPresent(action);
     } catch (RuntimeException e) {
-      this.optionalConsumer.ifPresent(con -> con.accept(new ExceptionAndInput<>(e, e.getMessage(), this.input)));
+      this.optionalConsumer.ifPresent(con -> con.accept(createExceptionAndInput(e)));
       throw e;
     }
   }
@@ -184,20 +186,25 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     return Objects.isNull(this.input) ? null : this.input.toString();
   }
 
-  private Consumer<String>
-  customValidationExceptionMessage(
-      Function<String, ? extends RuntimeException> exceptionFunction,
-      BiFunction<T, String, String> message) {
-    return validationMessages -> {
-      throw message.andThen(exceptionFunction).apply(input, validationMessages);
-    };
-  }
-
   private String createAllExceptionMessages(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
     return failedRules.stream()
         .map(ValidationRule::getMessage)
         .map(x -> x.apply(input.toString()))
         .distinct()
         .collect(joining(", "));
+  }
+
+  private ExceptionAndInput<RuntimeException, T> createExceptionAndInput(RuntimeException runtimeException) {
+    return new ExceptionAndInput<>(runtimeException, runtimeException.getMessage(), input);
+  }
+
+  private String getExceptionMessage(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+    var allExceptionMessages = createAllExceptionMessages(failedRules);
+    return format("For input: '%s', the following problems occurred: '%s'", input, allExceptionMessages);
+  }
+
+  private RuntimeException createCustomNotificationException(Function<String, ? extends RuntimeException> exceptionFunction, BiFunction<T, String, String> message, List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+    var allExceptionMessages = createAllExceptionMessages(failedRules);
+    return message.andThen(exceptionFunction).apply(input, allExceptionMessages);
   }
 }
