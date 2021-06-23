@@ -5,11 +5,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public interface ConsumerTerminal<T> {
-  T validateOrThrowNotify(); // TODO: change name
+  // TODO: change name
+  T validateOrThrowNotify();
 
   // TODO: change name
   T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
                           BiFunction<T, String, String> message);
+
+  // TODO : Do the above 2 methods and return Optional
 
   T validate();
 

@@ -191,7 +191,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
         .map(ValidationRule::getMessage)
         .map(x -> x.apply(input.toString()))
         .distinct()
-        .collect(joining(", "));
+        .collect(joining(", ")); // TODO use different separator ie ;, or add as arg
   }
 
   private ExceptionAndInput<RuntimeException, T> createExceptionAndInput(RuntimeException runtimeException) {
