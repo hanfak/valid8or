@@ -56,14 +56,14 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
 
   @Override
   public MustMessage<T> orThrow(Function<String, ? extends RuntimeException> exceptionFunction) {
-    check(Objects.isNull(exceptionFunction), "An exception function must not be provided");
+    check(Objects.isNull(exceptionFunction), "An exception function must be provided");
     this.exceptionFunction = exceptionFunction;
     return this;
   }
 
   @Override // TODO: Do I need this and butWas()
   public MustConnectorOrValidate<T> withMessage(UnaryOperator<String> messageFunction) {
-    check(Objects.isNull(messageFunction), "Message must not be provided");
+    check(Objects.isNull(messageFunction), "Message must be provided");
     // TODO: if exceptionFunction is null, then set it here ?? thus avoid to methods with message
     buildRule(messageFunction);
     return this;
@@ -72,6 +72,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   // TODO Do i need this??? Will need better name ie because?since?
   @Override
   public MustConnectorOrValidate<T> butWas(UnaryOperator<String> messageFunction) {
+    check(Objects.isNull(messageFunction), "Message must be provided");
     this.exceptionFunction = ValidationException::new;
     withMessage(messageFunction);
     return this;
@@ -79,7 +80,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
 
   @Override
   public ConsumerTerminal<T> thenConsume(Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer) {
-    check(Objects.isNull(consumer), "A consumer must not be provided");
+    check(Objects.isNull(consumer), "A consumer must be provided");
     this.optionalConsumer = Optional.of(consumer);
     return this;
   }
@@ -100,6 +101,9 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   @Override
   public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
                                  BiFunction<T, String, String> message) {
+    check(Objects.isNull(exceptionFunction), "An exception function must be provided");
+    check(Objects.isNull(message), "Message must be provided");
+
     var failedRules = findFailedRules();
     if (!failedRules.isEmpty()) {
       RuntimeException runtimeException = createCustomNotificationException(exceptionFunction, message, failedRules);
@@ -150,7 +154,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   private List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
   findFailedRules() {
     return this.validationRules.getRules()
-        .filter(not(x1 -> x1.getRule().test(this.input)))
+        .filter(not(validationRule -> validationRule.getRule().test(this.input)))
         .collect(toList());
   }
 
@@ -206,7 +210,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   private String createAllExceptionMessages(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
     return failedRules.stream()
         .map(ValidationRule::getMessage)
-        .map(x -> x.apply(this.input.toString()))
+        .map(messageFunction -> messageFunction.apply(this.input.toString()))
         .distinct()
         .collect(joining(", "));
   }
