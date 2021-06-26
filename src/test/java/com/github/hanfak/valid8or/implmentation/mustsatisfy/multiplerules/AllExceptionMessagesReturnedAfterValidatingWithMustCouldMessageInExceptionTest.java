@@ -8,7 +8,6 @@ import static com.github.hanfak.valid8or.implmentation.Valid8orMustSatisfyAllRul
 // No use of consumer or exception thrown
 class AllExceptionMessagesReturnedAfterValidatingWithMustCouldMessageInExceptionTest extends TestFixtures {
   // TODO paramtise for true/false assertion
-  // TODO separate tests with in tests
 
   @Test
   void checksInputIsValidUsingCustomMessageOutsideException() {

@@ -5,12 +5,20 @@ import java.util.stream.IntStream;
 
 public interface PredicateIntegerRules {
 
+  static Predicate<Integer> isEqualsTo(Integer value) {
+    return input -> input.equals(value);
+  }
+
+  static Predicate<Integer> isNotEqualsTo(Integer value) {
+    return input -> !input.equals(value);
+  }
+
   static Predicate<Integer> isZero() {
     return input -> input == 0;
   }
 
   static Predicate<Integer> isNonZero() {
-    return input -> input == 0;
+    return input -> input != 0;
   }
 
   static Predicate<Integer> isPositive() {
@@ -36,7 +44,7 @@ public interface PredicateIntegerRules {
   static Predicate<Integer> isCubed() {
     return input -> true;
   }
-
+  // This is not an efficient method, use standard library
   static Predicate<Integer> isPrime() {
 //    return  input -> Primes.isPrime(input);
 

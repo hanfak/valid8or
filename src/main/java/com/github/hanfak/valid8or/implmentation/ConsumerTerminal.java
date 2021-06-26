@@ -12,8 +12,6 @@ public interface ConsumerTerminal<T> {
   T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
                           BiFunction<T, String, String> message);
 
-  // TODO : Do the above 2 methods and return Optional
-
   T validate();
 
   Optional<T> validateThenReturnOptional();

@@ -3,7 +3,6 @@ package com.github.hanfak.valid8or.implmentation;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 // tODO use effective java builder pattern
@@ -13,7 +12,7 @@ final class ValidationRule<R,E> {
 
   private final R rule;
   private final E exception;
-  private final Function<String, String> message;
+  private final UnaryOperator<String> message;
 
   private ValidationRule(R rule, E exception, UnaryOperator<String> message) {
     this.rule = rule;

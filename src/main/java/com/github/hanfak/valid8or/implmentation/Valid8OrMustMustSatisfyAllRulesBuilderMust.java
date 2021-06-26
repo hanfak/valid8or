@@ -31,7 +31,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   }
 
   @Override
-  public MustSatisfy<T> forInput(final T input) {
+  public MustSatisfy<T> forInput(T input) {
     this.input = input;
     return this;
   }
@@ -42,27 +42,27 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
    * validForRule()
    */
   @Override
-  public MustThrowException<T> mustSatisfy(final Predicate<T> predicate) {
+  public MustThrowException<T> mustSatisfy(Predicate<T> predicate) {
     check(Objects.isNull(predicate), "Rule must be provided");
     this.predicate = predicate;
     return this;
   }
 
   @Override
-  public MustThrowException<T> andSatisfies(final Predicate<T> predicate) {
+  public MustThrowException<T> andSatisfies(Predicate<T> predicate) {
     mustSatisfy(predicate);
     return this;
   }
 
   @Override
-  public MustMessage<T> orThrow(final Function<String, ? extends RuntimeException> exceptionFunction) {
+  public MustMessage<T> orThrow(Function<String, ? extends RuntimeException> exceptionFunction) {
     check(Objects.isNull(exceptionFunction), "An exception function must not be provided");
     this.exceptionFunction = exceptionFunction;
     return this;
   }
 
   @Override // TODO: Do I need this and butWas()
-  public MustConnectorOrValidate<T> withMessage(final UnaryOperator<String> messageFunction) {
+  public MustConnectorOrValidate<T> withMessage(UnaryOperator<String> messageFunction) {
     check(Objects.isNull(messageFunction), "Message must not be provided");
     // TODO: if exceptionFunction is null, then set it here ?? thus avoid to methods with message
     buildRule(messageFunction);
@@ -71,18 +71,19 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
 
   // TODO Do i need this??? Will need better name ie because?since?
   @Override
-  public MustConnectorOrValidate<T> butWas(final UnaryOperator<String> messageFunction) {
-    exceptionFunction = ValidationException::new;
+  public MustConnectorOrValidate<T> butWas(UnaryOperator<String> messageFunction) {
+    this.exceptionFunction = ValidationException::new;
     withMessage(messageFunction);
     return this;
   }
 
   @Override
-  public ConsumerTerminal<T> thenConsume(final Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer) {
+  public ConsumerTerminal<T> thenConsume(Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer) {
     check(Objects.isNull(consumer), "A consumer must not be provided");
-    optionalConsumer = Optional.of(consumer);
+    this.optionalConsumer = Optional.of(consumer);
     return this;
   }
+
 
   @Override
   public T validateOrThrowNotify() {
@@ -90,10 +91,10 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     if (!failedRules.isEmpty()) {
       String exceptionMessage = getExceptionMessage(failedRules);
       var validationException = createExceptionAndInput(new ValidationException(exceptionMessage));
-      optionalConsumer.ifPresent(con -> con.accept(createExceptionAndInput(new ValidationException(exceptionMessage))));
+      this.optionalConsumer.ifPresent(con -> con.accept(validationException));
       throw validationException.getException();
     }
-    return input;
+    return this.input;
   }
 
   @Override
@@ -102,10 +103,10 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     var failedRules = findFailedRules();
     if (!failedRules.isEmpty()) {
       RuntimeException runtimeException = createCustomNotificationException(exceptionFunction, message, failedRules);
-      optionalConsumer.ifPresent(con -> con.accept(createExceptionAndInput(runtimeException)));
+      this.optionalConsumer.ifPresent(con -> con.accept(createExceptionAndInput(runtimeException)));
       throw runtimeException;
     }
-    return input;
+    return this.input;
   }
 
   @Override
@@ -134,10 +135,9 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     return !isValid();
   }
 
-  private void buildRule(final UnaryOperator<String> message) {
-    ValidationRuleBuilder<Predicate<T>, Function<String, ? extends RuntimeException>>
-        builder = create();
-    validationRules.add(builder.rule(this.predicate)
+  private void buildRule(UnaryOperator<String> message) {
+    ValidationRuleBuilder<Predicate<T>, Function<String, ? extends RuntimeException>> builder = create();
+    this.validationRules.add(builder.rule(this.predicate)
         .ifNotThrow(this.exceptionFunction)
         .withMessage(message));
   }
@@ -149,14 +149,14 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
 
   private List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
   findFailedRules() {
-    return validationRules.getRules()
+    return this.validationRules.getRules()
         .filter(not(x1 -> x1.getRule().test(this.input)))
         .collect(toList());
   }
 
   private void
-  consumeThenThrow(final List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules,
-                   final Consumer<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> action) {
+  consumeThenThrow(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules,
+                   Consumer<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> action) {
     try {
       failedRules.stream().findAny().ifPresent(action);
     } catch (RuntimeException e) {
@@ -175,7 +175,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   }
 
   private Set<String>
-  createListOfAllExceptionMessages(final List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+  createListOfAllExceptionMessages(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
     return failedRules.stream()
         .map(ValidationRule::getMessage)
         .map(messageFunction -> messageFunction.apply(nullSafeInput()))
@@ -186,25 +186,28 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     return Objects.isNull(this.input) ? null : this.input.toString();
   }
 
-  private String createAllExceptionMessages(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
-    return failedRules.stream()
-        .map(ValidationRule::getMessage)
-        .map(x -> x.apply(input.toString()))
-        .distinct()
-        .collect(joining(", ")); // TODO use different separator ie ;, or add as arg
-  }
-
   private ExceptionAndInput<RuntimeException, T> createExceptionAndInput(RuntimeException runtimeException) {
-    return new ExceptionAndInput<>(runtimeException, runtimeException.getMessage(), input);
+    return new ExceptionAndInput<>(runtimeException, runtimeException.getMessage(), this.input);
   }
 
   private String getExceptionMessage(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
     var allExceptionMessages = createAllExceptionMessages(failedRules);
-    return format("For input: '%s', the following problems occurred: '%s'", input, allExceptionMessages);
+    return format("For input: '%s', the following problems occurred: '%s'", this.input, allExceptionMessages);
   }
 
-  private RuntimeException createCustomNotificationException(Function<String, ? extends RuntimeException> exceptionFunction, BiFunction<T, String, String> message, List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+  private RuntimeException createCustomNotificationException(
+      Function<String, ? extends RuntimeException> exceptionFunction,
+      BiFunction<T, String, String> message,
+      List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
     var allExceptionMessages = createAllExceptionMessages(failedRules);
-    return message.andThen(exceptionFunction).apply(input, allExceptionMessages);
+    return message.andThen(exceptionFunction).apply(this.input, allExceptionMessages);
+  }
+
+  private String createAllExceptionMessages(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+    return failedRules.stream()
+        .map(ValidationRule::getMessage)
+        .map(x -> x.apply(this.input.toString()))
+        .distinct()
+        .collect(joining(", "));
   }
 }

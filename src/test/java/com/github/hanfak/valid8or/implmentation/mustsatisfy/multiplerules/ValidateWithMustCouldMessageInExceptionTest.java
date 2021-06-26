@@ -11,7 +11,7 @@ import static com.github.hanfak.valid8or.implmentation.Valid8orMustSatisfyAllRul
 import static java.lang.String.format;
 
 class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
-  // TODO separate tests with in tests
+
   @Nested
   class ReturnsInputAndNoExceptionThrownWhenInputIsValid {
 

@@ -12,7 +12,6 @@ import static java.lang.String.format;
 
 class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFixtures {
 
-  // TODO separate tests with in tests
   @Nested
   class ReturnsInputAsOptionalAndNoExceptionThrownWhenInputIsValid {
 
