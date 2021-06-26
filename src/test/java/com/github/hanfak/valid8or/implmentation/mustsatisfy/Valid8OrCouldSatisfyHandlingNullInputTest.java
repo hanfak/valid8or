@@ -4,14 +4,15 @@ import com.github.hanfak.valid8or.implmentation.ValidationException;
 import org.junit.jupiter.api.Test;
 import testinfrastructure.TestFixtures;
 
-import static com.github.hanfak.valid8or.implmentation.Valid8orMustSatisfyAllRules.forInput;
+import static com.github.hanfak.valid8or.implmentation.Valid8orCouldSatisfyAllRules.forInput;
 
-class Valid8OrMustMustCouldSatisfyHandlingNullInputTest extends TestFixtures {
+class Valid8OrCouldSatisfyHandlingNullInputTest extends TestFixtures {
+
   @Test
   void validateThenReturnOptionalWrapsValidatedInputWithOptional() {
     assertThat(
         forInput(4)
-            .mustSatisfy(isEven)
+            .couldSatisfy(isEven)
             .butWas(input -> "not legal")
             .validateThenReturnOptional())
         .isPresent().containsInstanceOf(Integer.class).contains(4);
@@ -21,7 +22,7 @@ class Valid8OrMustMustCouldSatisfyHandlingNullInputTest extends TestFixtures {
   void validateThenReturnOptionalEmptyWhenInputIsNull() {
     assertThat(
         forInput(null)
-            .mustSatisfy(input -> true)
+            .couldSatisfy(input -> true)
             .butWas(input -> "not legal")
             .validateThenReturnOptional())
         .isEmpty();
@@ -29,9 +30,9 @@ class Valid8OrMustMustCouldSatisfyHandlingNullInputTest extends TestFixtures {
 
   @Test
   void validationFailsForNullInputThrowsValidationExceptionUsingValidateThenReturnOptional() {
-    assertThatThrownBy( () ->
+    assertThatThrownBy(() ->
         forInput(null)
-            .mustSatisfy(input -> false)
+            .couldSatisfy(input -> false)
             .butWas(input -> "not legal")
             .validateThenReturnOptional())
         .isInstanceOf(ValidationException.class).hasMessage("not legal");
@@ -39,9 +40,9 @@ class Valid8OrMustMustCouldSatisfyHandlingNullInputTest extends TestFixtures {
 
   @Test
   void validationFailsForNullInputThrowsCustomExceptionUsingValidateThenReturnOptional() {
-    assertThatThrownBy( () ->
+    assertThatThrownBy(() ->
         forInput(null)
-            .mustSatisfy(input -> false)
+            .couldSatisfy(input -> false)
             .orThrow(IllegalStateException::new)
             .withMessage(input -> "not legal")
             .validateThenReturnOptional())
@@ -50,9 +51,9 @@ class Valid8OrMustMustCouldSatisfyHandlingNullInputTest extends TestFixtures {
 
   @Test
   void validationFailsForNullInputThrowsValidationExceptionUsingValidate() {
-    assertThatThrownBy( () ->
+    assertThatThrownBy(() ->
         forInput(null)
-            .mustSatisfy(input -> false)
+            .couldSatisfy(input -> false)
             .butWas(input -> "not legal")
             .validate())
         .isInstanceOf(ValidationException.class).hasMessage("not legal");
@@ -60,9 +61,9 @@ class Valid8OrMustMustCouldSatisfyHandlingNullInputTest extends TestFixtures {
 
   @Test
   void validationFailsForNullInputThrowsCustomExceptionUsingValidate() {
-    assertThatThrownBy( () ->
+    assertThatThrownBy(() ->
         forInput(null)
-            .mustSatisfy(input -> false)
+            .couldSatisfy(input -> false)
             .orThrow(IllegalStateException::new)
             .withMessage(input -> "not legal")
             .validate())
@@ -73,14 +74,14 @@ class Valid8OrMustMustCouldSatisfyHandlingNullInputTest extends TestFixtures {
   void validationFailsForNullInputListAsFailedValidation() {
     assertThat(
         forInput(null)
-            .mustSatisfy(x -> false).orThrow(IllegalStateException::new)
+            .couldSatisfy(x -> false).orThrow(IllegalStateException::new)
             .withMessage(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
     ).containsOnly("Is not even, for input: null");
 
     assertThat(
         forInput(null)
-            .mustSatisfy(x -> false)
+            .couldSatisfy(x -> false)
             .butWas(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
     ).containsOnly("Is not even, for input: null");

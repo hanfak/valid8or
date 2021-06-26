@@ -63,7 +63,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
 
   @Override // TODO: Do I need this and butWas()
   public MustConnectorOrValidate<T> withMessage(UnaryOperator<String> messageFunction) {
-    check(Objects.isNull(messageFunction), "Message must be provided");
+    check(Objects.isNull(messageFunction), "Message function must be provided");
     // TODO: if exceptionFunction is null, then set it here ?? thus avoid to methods with message
     buildRule(messageFunction);
     return this;
@@ -72,7 +72,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   // TODO Do i need this??? Will need better name ie because?since?
   @Override
   public MustConnectorOrValidate<T> butWas(UnaryOperator<String> messageFunction) {
-    check(Objects.isNull(messageFunction), "Message must be provided");
+    check(Objects.isNull(messageFunction), "Message function must be provided");
     this.exceptionFunction = ValidationException::new;
     withMessage(messageFunction);
     return this;
@@ -102,7 +102,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
                                  BiFunction<T, String, String> message) {
     check(Objects.isNull(exceptionFunction), "An exception function must be provided");
-    check(Objects.isNull(message), "Message must be provided");
+    check(Objects.isNull(message), "Message function must be provided");
 
     var failedRules = findFailedRules();
     if (!failedRules.isEmpty()) {
