@@ -1,4 +1,4 @@
-package com.github.hanfak.valid8or.implmentation.mustsatisfy;
+package com.github.hanfak.valid8or.implmentation.couldsatisfy;
 
 import com.github.hanfak.valid8or.implmentation.ValidationException;
 import org.junit.jupiter.api.Test;
