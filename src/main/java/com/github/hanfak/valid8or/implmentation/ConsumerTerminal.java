@@ -10,7 +10,7 @@ public interface ConsumerTerminal<T> {
 
   // TODO: change name
   T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
-                          BiFunction<T, String, String> message);
+                          BiFunction<T, String, String> messageFunction);
 
   T validate();
 

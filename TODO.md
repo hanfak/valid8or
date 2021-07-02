@@ -50,14 +50,4 @@ https://shields.io/
 - examples
 - javadoc
 - changelog
-- jacoco
-- findbugs
-- pmd
-- push library to github/maven
-    - https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry
-    - https://docs.github.com/en/actions/guides/publishing-java-packages-with-maven
 
-- Tests
-    - Testlogger, or capture system out to test thenconsume emthod
-    - fluent api for mustSatisfy flow
-    - Predicate helpers

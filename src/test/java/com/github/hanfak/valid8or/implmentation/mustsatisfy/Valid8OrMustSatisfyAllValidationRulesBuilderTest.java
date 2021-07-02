@@ -12,7 +12,8 @@ class Valid8OrMustSatisfyAllValidationRulesBuilderTest extends TestFixtures {
   void mustSatisfiesMethodCannotAcceptNullArguments() {
     assertThatThrownBy(() ->
         forInput(4)
-            .mustSatisfy(null))
+            .mustSatisfy(null)
+            .butWas(input -> "not legal"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Rule must be provided");
   }
@@ -22,7 +23,7 @@ class Valid8OrMustSatisfyAllValidationRulesBuilderTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(4)
             .mustSatisfy(isEven).butWas(input -> "not legal")
-            .andSatisfies(null))
+            .andSatisfies(null).butWas(input -> "not legal"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Rule must be provided");
   }
@@ -32,7 +33,7 @@ class Valid8OrMustSatisfyAllValidationRulesBuilderTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(4)
             .mustSatisfy(isEven)
-            .orThrow(null))
+            .orThrow(null).withMessage(input -> "not legal"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("An exception function must be provided");
   }

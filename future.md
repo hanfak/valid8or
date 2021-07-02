@@ -1,4 +1,11 @@
 
+- delombok, and write tests
+- Documentation
+- Readme
+- examples
+- javadoc
+- changelog
+
 - Terminal op that returns optional values or empty when rule fails
     - return object with input and error message (nullable or default string)
         - getInputIfNoError
