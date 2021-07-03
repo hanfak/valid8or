@@ -23,9 +23,9 @@
         <junit.version>5.8.0-M1</junit.version>
         <assertj-core.version>3.12.2</assertj-core.version>
         <mockito.version>3.9.0</mockito.version>
-<!--        <sonar.projectKey>hanfak_valid8or</sonar.projectKey>-->
-<!--        <sonar.organization>hanfak</sonar.organization>-->
-<!--        <sonar.host.url>https://sonarcloud.io</sonar.host.url>-->
+        <sonar.projectKey>hanfak_valid8or</sonar.projectKey>
+        <sonar.organization>hanfak</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
