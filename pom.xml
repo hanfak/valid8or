@@ -18,43 +18,17 @@
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
         <maven.surefire.version>2.19.1</maven.surefire.version>
-        <acceptance.tests>${project.groupId}.acceptancetests/**/*.java</acceptance.tests>
         <skipTests>false</skipTests>
-        <jacoco.version>0.8.2</jacoco.version>
-        <findbugs.version>3.0.4</findbugs.version>
-        <commons.lang.version>3.12.0</commons.lang.version>
+        <jacoco.version>0.8.4</jacoco.version>
         <junit.version>5.8.0-M1</junit.version>
         <assertj-core.version>3.12.2</assertj-core.version>
         <mockito.version>3.9.0</mockito.version>
-        <commons-logging.version>1.2</commons-logging.version>
-        <log.slf4j.version>1.7.26</log.slf4j.version>
-        <sonar.projectKey>hanfak_valid8or</sonar.projectKey>
-        <sonar.organization>hanfak</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+<!--        <sonar.projectKey>hanfak_valid8or</sonar.projectKey>-->
+<!--        <sonar.organization>hanfak</sonar.organization>-->
+<!--        <sonar.host.url>https://sonarcloud.io</sonar.host.url>-->
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>3.6.1</version>
-        </dependency>
-        <!-- Reflective toString/equals/hashCode builders -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons.lang.version}</version>
-        </dependency>
-        <!--   Logging     -->
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${commons-logging.version}.3</version>
-            <scope>test</scope>
-        </dependency>
-
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -89,12 +63,6 @@
             <version>1.3.8</version>
             <scope>test</scope>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>net.jqwik</groupId>-->
-        <!--            <artifactId>jqwik</artifactId>-->
-        <!--            <version>1.5.1</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -124,7 +92,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.4</version>
+                <version>${jacoco.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>**/api/**/*</exclude>

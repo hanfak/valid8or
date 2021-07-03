@@ -1,7 +1,5 @@
 package com.github.hanfak.valid8or.api.helper;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -17,13 +15,13 @@ public interface PredicateStringRules {
     return v -> !(nonNull(v) && !v.trim().isEmpty());
   }
 
-  static Predicate<String> isNotBlank() {
-    return v -> !StringUtils.isBlank(v);
-  }
-
-  static Predicate<String> isBlank() {
-    return StringUtils::isBlank;
-  }
+//  static Predicate<String> isNotBlank() {
+//    return v -> false;
+//  }
+//
+//  static Predicate<String> isBlank() {
+//    return v -> false;
+//  }
 
   static Predicate<String> isAllUppercase() {
     return v -> true;
