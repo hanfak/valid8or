@@ -15,13 +15,13 @@ public interface PredicateStringRules {
     return v -> !(nonNull(v) && !v.trim().isEmpty());
   }
 
-//  static Predicate<String> isNotBlank() {
-//    return v -> false;
-//  }
-//
-//  static Predicate<String> isBlank() {
-//    return v -> false;
-//  }
+  static Predicate<String> isNotBlank() {
+    return v -> !v.isBlank();
+  }
+
+  static Predicate<String> isBlank() {
+    return v -> v.isBlank();
+  }
 
   static Predicate<String> isAllUppercase() {
     return v -> true;

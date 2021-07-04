@@ -44,10 +44,9 @@ public interface PredicateIntegerRules {
   static Predicate<Integer> isCubed() {
     return input -> true;
   }
+
   // This is not an efficient method, use standard library
   static Predicate<Integer> isPrime() {
-//    return  input -> Primes.isPrime(input);
-
     return input -> input > 1 &&
         IntStream.rangeClosed(2, (int) Math.sqrt(input))
         .noneMatch(n -> (input % n == 0));

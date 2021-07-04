@@ -27,17 +27,23 @@ Add the dependency
 ### Maven
 ```xml
 <repositories>
+    ...
     <repository>
         <id>jitpack.io</id>
         <url>https://jitpack.io</url>
     </repository>
+    ...
 </repositories>
 
-<dependency>
-  <groupId>com.github.hanfak</groupId>
-  <artifactId>valid8or</artifactId>
-  <version>0.0.3</version>
-</dependency>
+<dependencies>
+    ...
+    <dependency>
+        <groupId>com.github.hanfak</groupId>
+        <artifactId>valid8or</artifactId>
+        <version>0.0.3</version>
+    </dependency>
+    ...
+</dependencies>
 ```
 
 ## How to use 
