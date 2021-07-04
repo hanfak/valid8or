@@ -75,6 +75,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     return this;
   }
 
+  @SuppressWarnings("Convert2MethodRef")// For readability
   @Override
   public T validateOrThrowNotify() {
     return this.validationLogic.validateOrThrowNotify(not(failedRules -> failedRules.isEmpty()),
@@ -83,6 +84,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
         this.validationRules);
   }
 
+  @SuppressWarnings("Convert2MethodRef")// For readability
   @Override
   public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
                                  BiFunction<T, String, String> messageFunction) {
@@ -110,6 +112,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     return this.validationLogic.allExceptionMessages(this.validationRules, this.input, failedRules -> true);
   }
 
+  @SuppressWarnings("Convert2MethodRef")// For readability
   @Override
   public boolean isValid() {
     return this.validationLogic.isValid(failedRules -> failedRules.isEmpty(), this.validationRules, this.input);

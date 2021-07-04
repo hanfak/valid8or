@@ -20,7 +20,7 @@ public interface PredicateStringRules {
   }
 
   static Predicate<String> isBlank() {
-    return v -> v.isBlank();
+    return String::isBlank;
   }
 
   static Predicate<String> isAllUppercase() {
