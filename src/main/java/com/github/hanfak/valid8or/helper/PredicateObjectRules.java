@@ -1,4 +1,4 @@
-package com.github.hanfak.valid8or.api.helper;
+package com.github.hanfak.valid8or.helper;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -16,7 +16,4 @@ public interface PredicateObjectRules {
   static <T> Predicate<T> isNull() {
     return Objects::isNull;
   }
-
-//instanceOf
-  //subtypeOf
 }

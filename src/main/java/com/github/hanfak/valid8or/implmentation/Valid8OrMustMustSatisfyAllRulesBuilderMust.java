@@ -1,5 +1,6 @@
 package com.github.hanfak.valid8or.implmentation;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.*;
@@ -18,6 +19,8 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
 
   private final ValidationRules<T> validationRules;
   private final ValidationLogic<T> validationLogic;
+  private final Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>>
+      thereExistsOneFailedRule = not(List::isEmpty);;
 
   Valid8OrMustMustSatisfyAllRulesBuilderMust(ValidationRules<T> validationRules, ValidationLogic<T> validationLogic) {
     this.validationRules = validationRules;
@@ -78,27 +81,31 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   @SuppressWarnings("Convert2MethodRef")// For readability
   @Override
   public T validateOrThrowNotify() {
-    return this.validationLogic.validateOrThrowNotify(not(failedRules -> failedRules.isEmpty()),
+    return this.validationLogic.validateOrThrowNotify(
         this.input,
+        this.validationRules,
         this.optionalConsumer,
-        this.validationRules);
+        thereExistsOneFailedRule
+    );
   }
 
   @SuppressWarnings("Convert2MethodRef")// For readability
   @Override
   public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
                                  BiFunction<T, String, String> messageFunction) {
-    return this.validationLogic.validateOrThrowNotify(exceptionFunction,
-        messageFunction,
-        not(failedRules -> failedRules.isEmpty()),
-        this.optionalConsumer,
+    return this.validationLogic.validateOrThrowNotify(
         this.input,
-        this.validationRules);
+        this.validationRules,
+        exceptionFunction,
+        messageFunction,
+        this.optionalConsumer,
+        thereExistsOneFailedRule
+    );
   }
 
   @Override
   public T validate() { // TODO : change to toBeValid(), validateInput(),
-    return this.validationLogic.validate(this.validationRules, this.input, this.optionalConsumer, failedRules -> true);
+    return this.validationLogic.validate(this.input, this.validationRules, this.optionalConsumer, failedRules -> true);
   }
 
   @Override
@@ -109,13 +116,13 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
 
   @Override
   public Set<String> allExceptionMessages() {
-    return this.validationLogic.allExceptionMessages(this.validationRules, this.input, failedRules -> true);
+    return this.validationLogic.allExceptionMessages(this.input, this.validationRules, failedRules -> true);
   }
 
   @SuppressWarnings("Convert2MethodRef")// For readability
   @Override
   public boolean isValid() {
-    return this.validationLogic.isValid(failedRules -> failedRules.isEmpty(), this.validationRules, this.input);
+    return this.validationLogic.isValid(this.input, this.validationRules, failedRules -> failedRules.isEmpty());
   }
 
   @Override

@@ -1,4 +1,4 @@
-package com.github.hanfak.valid8or.api.helper;
+package com.github.hanfak.valid8or.helper;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -27,9 +27,6 @@ public interface PredicateStringRules {
     return v -> true;
   }
 
-  // isAllLowercase
-  // isCamelCase etc
-
   static Predicate<String> isWithinMax(int max) {
     return v -> Objects.isNull(v) || v.length() <= max;
   }
@@ -37,7 +34,4 @@ public interface PredicateStringRules {
   static Predicate<String> isWithinMin(int min) {
     return v -> nonNull(v) && v.length() >= min;
   }
-
-  //containsPattern
-  //contains
 }

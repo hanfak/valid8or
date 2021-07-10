@@ -1,4 +1,4 @@
-package com.github.hanfak.valid8or.api.helper;
+package com.github.hanfak.valid8or.helper;
 
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
@@ -34,15 +34,20 @@ public interface PredicateIntegerRules {
   }
 
   static Predicate<Integer> isOdd() {
-    return input -> input % 2 == 1;
+    return input -> Math.abs(input) % 2 == 1;
   }
 
+  // Newtons-Raphson Method, for positive input
   static Predicate<Integer> isSquare() {
-    return input -> true;
-  }
-
-  static Predicate<Integer> isCubed() {
-    return input -> true;
+    return input -> {
+      long x1 = input;
+      long x2 = 1L;
+      while (x1 > x2) {
+        x1 = (x1 + x2) / 2L;
+        x2 = input / x1;
+      }
+      return x1 == x2 && input % x1 == 0L;
+    };
   }
 
   // This is not an efficient method, use standard library

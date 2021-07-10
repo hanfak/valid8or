@@ -75,26 +75,34 @@ final class Valid8OrCouldCouldSatisfyAllRulesBuilderCould<T> implements Valid8Or
 
   @Override
   public T validateOrThrowNotify() {
-    return this.validationLogic.validateOrThrowNotify(failedRules -> failedRules.size() == this.validationRules.size(),
+    return this.validationLogic.validateOrThrowNotify(
         this.input,
+        this.validationRules,
         this.optionalConsumer,
-        this.validationRules);
+        failedRules -> failedRules.size() == this.validationRules.size()
+    );
   }
 
   @Override
   public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
                                  BiFunction<T, String, String> messageFunction) {
-    return this.validationLogic.validateOrThrowNotify(exceptionFunction,
-        messageFunction,
-        failedRules -> failedRules.size() == this.validationRules.size(),
-        this.optionalConsumer,
+    return this.validationLogic.validateOrThrowNotify(
         this.input,
-        this.validationRules);
+        this.validationRules,
+        exceptionFunction,
+        messageFunction,
+        this.optionalConsumer,
+        failedRules -> failedRules.size() == this.validationRules.size()
+    );
   }
 
   @Override
   public T validate() { // TODO : change to toBeValid(), validateInput(),
-    return this.validationLogic.validate(this.validationRules, this.input, this.optionalConsumer, failedRules -> failedRules.size() == validationRules.size());
+    return this.validationLogic.validate(
+        this.input,
+        this.validationRules,
+        this.optionalConsumer,
+        failedRules -> failedRules.size() == validationRules.size());
   }
 
   @Override
@@ -105,12 +113,17 @@ final class Valid8OrCouldCouldSatisfyAllRulesBuilderCould<T> implements Valid8Or
 
   @Override
   public Set<String> allExceptionMessages() {
-    return this.validationLogic.allExceptionMessages(this.validationRules, this.input, failedRules -> failedRules.size() == this.validationRules.size());
+    return this.validationLogic.allExceptionMessages(
+        this.input,
+        this.validationRules,
+        failedRules -> failedRules.size() == this.validationRules.size());
   }
 
   @Override
   public boolean isValid() {
-    return this.validationLogic.isValid(failedRules -> failedRules.size() != this.validationRules.size(), this.validationRules, this.input);
+    return this.validationLogic.isValid(
+        this.input, this.validationRules, failedRules -> failedRules.size() != this.validationRules.size()
+    );
   }
 
   @Override

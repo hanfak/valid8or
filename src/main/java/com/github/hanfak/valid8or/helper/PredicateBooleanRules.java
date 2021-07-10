@@ -1,4 +1,4 @@
-package com.github.hanfak.valid8or.api.helper;
+package com.github.hanfak.valid8or.helper;
 
 import java.util.Objects;
 import java.util.function.Predicate;
