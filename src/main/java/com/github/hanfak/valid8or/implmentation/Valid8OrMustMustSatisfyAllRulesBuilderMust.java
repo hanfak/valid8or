@@ -20,7 +20,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   private final ValidationRules<T> validationRules;
   private final ValidationLogic<T> validationLogic;
   private final Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>>
-      thereExistsOneFailedRule = not(List::isEmpty);;
+      thereExistsOneFailedRule = not(List::isEmpty);
 
   Valid8OrMustMustSatisfyAllRulesBuilderMust(ValidationRules<T> validationRules, ValidationLogic<T> validationLogic) {
     this.validationRules = validationRules;

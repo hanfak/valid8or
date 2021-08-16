@@ -1,5 +1,6 @@
 package com.github.hanfak.valid8or.implmentation.couldsatisfy.multiplerules;
 
+import com.github.hanfak.valid8or.helper.PredicateStringRules;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import testinfrastructure.TestFixtures;
