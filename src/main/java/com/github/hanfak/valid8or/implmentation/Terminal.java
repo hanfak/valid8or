@@ -7,5 +7,5 @@ public interface Terminal<T> extends ConsumerTerminal<T> {
 
   boolean isValid();
 
-  boolean isInvalid();
+  boolean isNotValid();
 }

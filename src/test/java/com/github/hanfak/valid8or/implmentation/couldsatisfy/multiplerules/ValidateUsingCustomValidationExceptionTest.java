@@ -20,21 +20,21 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
     void usingCustomExceptionWithCustomMessageUsingInput(int value) {
       assertThat(
           forInput(value)
-              .couldSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .orSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(value);
 
       assertThat(
           forInput(value)
-              .couldSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .orSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .or(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(value);
     }
@@ -46,9 +46,9 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
           forInput(value)
               .couldSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .orSatisfies(isGreaterThan2)
+              .or(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(value);
 
@@ -56,9 +56,9 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
           forInput(value)
               .couldSatisfy(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .orSatisfies(isEven)
+              .or(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(value);
     }
@@ -71,11 +71,11 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
     void usingCustomExceptionWithCustomMessageUsingInputThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(1)
-              .couldSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .orSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 1, with messages: 'Is not even, for input: 1, Is not greater than 2, for input: 1'")
@@ -83,11 +83,11 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
 
       assertThatThrownBy(() ->
           forInput(1)
-              .couldSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .orSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .or(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1, Is not even, for input: 1'")
@@ -100,9 +100,9 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
           forInput(1)
               .couldSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .orSatisfies(isGreaterThan2)
+              .or(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 1, with messages: 'Is not even, for input: 1, Is not greater than 2, for input: 1'")
@@ -112,9 +112,9 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
           forInput(1)
               .couldSatisfy(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .orSatisfies(isEven)
+              .or(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1, Is not even, for input: 1'")

@@ -14,7 +14,7 @@ class Valid8OrMustSatisfyHandlingNullInputTest extends TestFixtures {
         forInput(4)
             .mustSatisfy(isEven)
             .butWas(input -> "not legal")
-            .validateThenReturnOptional())
+            .throwIfNotValidReturnOptional())
         .isPresent().containsInstanceOf(Integer.class).contains(4);
   }
 
@@ -24,7 +24,7 @@ class Valid8OrMustSatisfyHandlingNullInputTest extends TestFixtures {
         forInput(null)
             .mustSatisfy(input -> true)
             .butWas(input -> "not legal")
-            .validateThenReturnOptional())
+            .throwIfNotValidReturnOptional())
         .isEmpty();
   }
 
@@ -34,7 +34,7 @@ class Valid8OrMustSatisfyHandlingNullInputTest extends TestFixtures {
         forInput(null)
             .mustSatisfy(input -> false)
             .butWas(input -> "not legal")
-            .validateThenReturnOptional())
+            .throwIfNotValidReturnOptional())
         .isInstanceOf(ValidationException.class).hasMessage("not legal");
   }
 
@@ -43,9 +43,9 @@ class Valid8OrMustSatisfyHandlingNullInputTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(null)
             .mustSatisfy(input -> false)
-            .orThrow(IllegalStateException::new)
-            .withMessage(input -> "not legal")
-            .validateThenReturnOptional())
+            .orElseThrow(IllegalStateException::new)
+            .withExceptionMessage(input -> "not legal")
+            .throwIfNotValidReturnOptional())
         .isInstanceOf(IllegalStateException.class).hasMessage("not legal");
   }
 
@@ -55,7 +55,7 @@ class Valid8OrMustSatisfyHandlingNullInputTest extends TestFixtures {
         forInput(null)
             .mustSatisfy(input -> false)
             .butWas(input -> "not legal")
-            .validate())
+            .throwIfNotValid())
         .isInstanceOf(ValidationException.class).hasMessage("not legal");
   }
 
@@ -64,9 +64,9 @@ class Valid8OrMustSatisfyHandlingNullInputTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(null)
             .mustSatisfy(input -> false)
-            .orThrow(IllegalStateException::new)
-            .withMessage(input -> "not legal")
-            .validate())
+            .orElseThrow(IllegalStateException::new)
+            .withExceptionMessage(input -> "not legal")
+            .throwIfNotValid())
         .isInstanceOf(IllegalStateException.class).hasMessage("not legal");
   }
 
@@ -74,8 +74,8 @@ class Valid8OrMustSatisfyHandlingNullInputTest extends TestFixtures {
   void validationFailsForNullInputListAsFailedValidation() {
     assertThat(
         forInput(null)
-            .mustSatisfy(x -> false).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input: " + input)
+            .mustSatisfy(x -> false).orElseThrow(IllegalStateException::new)
+            .withExceptionMessage(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
     ).containsOnly("Is not even, for input: null");
 

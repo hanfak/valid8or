@@ -16,9 +16,9 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
     void usingCustomExceptionWithCustomMessageUsingInput() {
       assertThat(
           forInput(4)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwNotificationIfNotValid()
       ).isEqualTo(4);
     }
 
@@ -28,7 +28,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
           forInput(4)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify()
+              .throwNotificationIfNotValid()
       ).isEqualTo(4);
     }
   }
@@ -40,9 +40,9 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
     void usingCustomExceptionWithCustomMessageUsingInputThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -54,7 +54,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
           forInput(3)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify()
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);

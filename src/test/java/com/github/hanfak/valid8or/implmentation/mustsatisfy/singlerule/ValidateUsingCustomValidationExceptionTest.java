@@ -17,9 +17,9 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
     void usingCustomExceptionWithCustomMessageUsingInput() {
       assertThat(
           forInput(4)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(4);
     }
@@ -30,7 +30,7 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
           forInput(4)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(4);
     }
@@ -43,9 +43,9 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
     void usingCustomExceptionWithCustomMessageUsingInputThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 3, with messages: 'Is not even, for input: 3'")
@@ -58,7 +58,7 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
           forInput(3)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify(CustomException::new,
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 3, with messages: 'Is not even, for input: 3'")

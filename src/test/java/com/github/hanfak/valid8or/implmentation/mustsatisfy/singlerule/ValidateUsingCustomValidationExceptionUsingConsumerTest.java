@@ -1,6 +1,5 @@
 package com.github.hanfak.valid8or.implmentation.mustsatisfy.singlerule;
 
-import com.github.hanfak.valid8or.implmentation.ValidationException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import testinfrastructure.CustomException;
@@ -18,10 +17,10 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumer() {
       assertThat(
           forInput(4)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify(CustomException::new,
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(4);
     }
@@ -32,8 +31,8 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
           forInput(4)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify(CustomException::new,
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(4);
     }
@@ -46,10 +45,10 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumerThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify(CustomException::new,
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 3, with messages: 'Is not even, for input: 3'")
@@ -67,8 +66,8 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
           forInput(3)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify(CustomException::new,
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 3, with messages: 'Is not even, for input: 3'")

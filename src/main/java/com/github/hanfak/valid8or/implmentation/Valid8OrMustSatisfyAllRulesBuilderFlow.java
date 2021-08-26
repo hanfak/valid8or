@@ -1,7 +1,7 @@
 package com.github.hanfak.valid8or.implmentation;
 
 
-interface Valid8OrMustMustSatisfyAllRulesBuilderFlow<T> extends
+interface Valid8OrMustSatisfyAllRulesBuilderFlow<T> extends
     ForMustInput<T>,
 
     MustSatisfy<T>,
@@ -10,5 +10,4 @@ interface Valid8OrMustMustSatisfyAllRulesBuilderFlow<T> extends
     MustMessage<T>,
     MustConnectorOrValidate<T>,
 
-    Terminal<T> {
-}
+    Terminal<T> {}

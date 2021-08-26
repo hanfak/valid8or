@@ -17,10 +17,10 @@ public class ValidateUsingCustomValidationExceptionUsingConsumerTest extends Tes
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumer() {
       assertThat(
           forInput(4)
-              .couldSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify(CustomException::new,
+              .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(4);
     }
@@ -31,8 +31,8 @@ public class ValidateUsingCustomValidationExceptionUsingConsumerTest extends Tes
           forInput(4)
               .couldSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify(CustomException::new,
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(4);
     }
@@ -45,10 +45,10 @@ public class ValidateUsingCustomValidationExceptionUsingConsumerTest extends Tes
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumerThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .couldSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify(CustomException::new,
+              .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 3, with messages: 'Is not even, for input: 3'")
@@ -66,8 +66,8 @@ public class ValidateUsingCustomValidationExceptionUsingConsumerTest extends Tes
           forInput(3)
               .couldSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify(CustomException::new,
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 3, with messages: 'Is not even, for input: 3'")

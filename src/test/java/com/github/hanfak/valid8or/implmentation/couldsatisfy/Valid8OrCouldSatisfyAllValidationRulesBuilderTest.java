@@ -22,7 +22,7 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(4)
             .couldSatisfy(isEven).butWas(input -> "not legal")
-            .orSatisfies(null)
+            .or(null)
             .butWas(input -> "not legal"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Predicate rule must be provided");
@@ -33,8 +33,8 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(4)
             .couldSatisfy(isEven)
-            .orThrow(null)
-            .withMessage(input -> "not legal"))
+            .orElseThrow(null)
+            .withExceptionMessage(input -> "not legal"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("An exception function must be provided");
   }
@@ -44,8 +44,8 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(4)
             .couldSatisfy(isEven)
-            .orThrow(IllegalArgumentException::new)
-            .withMessage(null))
+            .orElseThrow(IllegalArgumentException::new)
+            .withExceptionMessage(null))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Message function must be provided");
   }
@@ -66,7 +66,7 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
         forInput(4)
             .couldSatisfy(isEven)
             .butWas(input -> "not legal")
-            .thenConsume(null))
+            .useConsumer(null))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("A consumer must be provided");
   }
@@ -76,7 +76,7 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
         forInput(4)
             .couldSatisfy(isEven)
             .butWas(input -> "not legal")
-            .validateOrThrowNotify(null, (input, error) -> "some message"))
+            .throwNotificationIfNotValid(null, (input, error) -> "some message"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("An exception function must be provided");
 
@@ -84,7 +84,7 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
         forInput(4)
             .couldSatisfy(isEven)
             .butWas(input -> "not legal")
-            .validateOrThrowNotify(CustomException::new, null))
+            .throwNotificationIfNotValid(CustomException::new, null))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Message function must be provided");
   }

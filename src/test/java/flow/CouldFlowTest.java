@@ -1,4 +1,5 @@
 package flow;
+
 import com.github.hanfak.valid8or.implmentation.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-@Disabled("TODO later")
+
+@Disabled()
 class CouldFlowTest {
   @Test
   void forInputMethodHasOneMethodsNext() {

@@ -19,20 +19,20 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
     void usingCustomExceptionWithCustomMessageUsingInput(int value) {
       assertThat(
           forInput(value)
-              .couldSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .orSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .validate()
+              .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .throwIfNotValid()
       ).isEqualTo(value);
 
       assertThat(
           forInput(value)
-              .couldSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .orSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validate()
+              .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .or(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwIfNotValid()
       ).isEqualTo(value);
     }
 
@@ -43,18 +43,18 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
           forInput(value)
               .couldSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .orSatisfies(isGreaterThan2)
+              .or(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .validate()
+              .throwIfNotValid()
       ).isEqualTo(value);
 
       assertThat(
           forInput(value)
               .couldSatisfy(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .orSatisfies(isEven)
+              .or(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validate()
+              .throwIfNotValid()
       ).isEqualTo(value);
     }
   }
@@ -66,22 +66,22 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
     void usingCustomExceptionWithCustomMessageUsingInputThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(1)
-              .couldSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .orSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .validate()
+              .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .throwIfNotValid()
       )
           .hasMessage("Is not even, for input: 1")
           .isInstanceOf(IllegalStateException.class);
 
       assertThatThrownBy(() ->
           forInput(1)
-              .couldSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .orSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validate()
+              .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .or(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwIfNotValid()
       )
           .hasMessage("Is not greater than 2, for input: 1")
           .isInstanceOf(IllegalArgumentException.class);
@@ -93,9 +93,9 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
           forInput(1)
               .couldSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .orSatisfies(isGreaterThan2)
+              .or(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .validate()
+              .throwIfNotValid()
       )
           .hasMessage("Is not even, for input: 1")
           .isInstanceOf(ValidationException.class);
@@ -104,9 +104,9 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
           forInput(1)
               .couldSatisfy(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .orSatisfies(isEven)
+              .or(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validate()
+              .throwIfNotValid()
       )
           .hasMessage("Is not greater than 2, for input: 1")
           .isInstanceOf(ValidationException.class);

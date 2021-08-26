@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
-public class ValidationLogic<T> {
+final class ValidationLogic<T> {
 
   private static final String MISSING_MESSAGE_FUNCTION_EXCEPTION_MESSAGE = "Message function must be provided";
   private static final String MISSING_EXCEPTION_FUNCTION_EXCEPTION_MESSAGE = "An exception function must be provided";
@@ -32,7 +32,7 @@ public class ValidationLogic<T> {
     validationRules.add(validationRule(rulePredicate, exceptionFunction, messageFunction));
   }
 
-  T validateOrThrowNotify(T input, ValidationRules<T> validationRules, Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer, Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
+  T throwNotificationIfNotValid(T input, ValidationRules<T> validationRules, Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer, Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
       var exceptionMessage = getExceptionMessage(failedRules, input);
@@ -43,9 +43,9 @@ public class ValidationLogic<T> {
     return input;
   }
 
-  T validateOrThrowNotify(T input, ValidationRules<T> validationRules, Function<String, ? extends RuntimeException> exceptionFunction,
-                          BiFunction<T, String, String> messageFunction,
-                          Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer, Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
+  T throwNotificationIfNotValid(T input, ValidationRules<T> validationRules, Function<String, ? extends RuntimeException> exceptionFunction,
+                                BiFunction<T, String, String> messageFunction,
+                                Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer, Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
     check(isNull(exceptionFunction), MISSING_EXCEPTION_FUNCTION_EXCEPTION_MESSAGE);
     check(isNull(messageFunction), MISSING_MESSAGE_FUNCTION_EXCEPTION_MESSAGE);
 
@@ -58,9 +58,9 @@ public class ValidationLogic<T> {
     return input;
   }
 
-  T validate(T input, ValidationRules<T> validationRules,
-             Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
-             Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
+  T throwIfNotValid(T input, ValidationRules<T> validationRules,
+                    Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
+                    Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
       consumeThenThrow(failedRules, throwException(input), optionalConsumer, input);

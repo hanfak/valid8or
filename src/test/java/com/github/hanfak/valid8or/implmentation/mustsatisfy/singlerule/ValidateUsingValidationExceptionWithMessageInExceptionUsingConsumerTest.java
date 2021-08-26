@@ -16,10 +16,10 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumer() {
       assertThat(
           forInput(4)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       ).isEqualTo(4);
     }
 
@@ -29,8 +29,8 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
           forInput(4)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       ).isEqualTo(4);
     }
   }
@@ -42,10 +42,10 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumerThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -62,8 +62,8 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
           forInput(3)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);

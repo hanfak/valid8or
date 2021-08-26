@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public interface MustConnectorOrValidate<T> extends Terminal<T> {
-  MustThrowException<T> andSatisfies(Predicate<T> predicateRule);
+  MustThrowException<T> and(Predicate<T> predicateRule);
 
-  ConsumerTerminal<T> thenConsume(Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer);
+  ConsumerTerminal<T> useConsumer(Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer);
 }

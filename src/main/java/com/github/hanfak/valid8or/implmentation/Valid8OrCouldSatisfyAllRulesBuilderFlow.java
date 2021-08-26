@@ -1,6 +1,6 @@
 package com.github.hanfak.valid8or.implmentation;
 
-interface Valid8OrCouldCouldSatisfyAllRulesBuilderFlow<T> extends
+interface Valid8OrCouldSatisfyAllRulesBuilderFlow<T> extends
     ForCouldInput<T>,
 
     CouldSatisfy<T>,
@@ -9,5 +9,4 @@ interface Valid8OrCouldCouldSatisfyAllRulesBuilderFlow<T> extends
     CouldMessage<T>,
     CouldConnectorOrValidate<T>,
 
-    Terminal<T> {
-}
+    Terminal<T> {}

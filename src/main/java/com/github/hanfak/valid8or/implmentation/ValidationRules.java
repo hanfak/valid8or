@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-class ValidationRules<T> {
+final class ValidationRules<T> {
 
   private final List<ValidationRule<Predicate<T>, Function<String, ? extends RuntimeException>>>
       rules = new ArrayList<>();

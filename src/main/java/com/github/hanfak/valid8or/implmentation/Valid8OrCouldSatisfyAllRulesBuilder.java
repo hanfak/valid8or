@@ -8,7 +8,7 @@ import static com.github.hanfak.valid8or.implmentation.Utils.check;
 import static java.util.Objects.isNull;
 import static java.util.Optional.empty;
 
-final class Valid8OrCouldSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow<T> implements Valid8OrCouldCouldSatisfyAllRulesBuilderFlow<T> {
+final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8OrCouldSatisfyAllRulesBuilderFlow<T> {
 
   private T input;
   private Predicate<T> predicate;
@@ -18,16 +18,11 @@ final class Valid8OrCouldSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow<T> imp
   private final ValidationRules<T> validationRules;
   private final ValidationLogic<T> validationLogic;
 
-  Valid8OrCouldSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow(ValidationRules<T> validationRules, ValidationLogic<T> validationLogic) {
+  Valid8OrCouldSatisfyAllRulesBuilder(ValidationRules<T> validationRules, ValidationLogic<T> validationLogic) {
     this.validationRules = validationRules;
     this.validationLogic = validationLogic;
   }
 
-  /**
-   * TODO change name:
-   * isValidFor(), holdsFor(), holdsForRule()
-   * validForRule()
-   */
   @Override
   public CouldSatisfy<T> forInput(T input) {
     this.input = input;
@@ -41,41 +36,41 @@ final class Valid8OrCouldSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow<T> imp
   }
 
   @Override
-  public CouldThrowException<T> orSatisfies(Predicate<T> predicateRule) {
+  public CouldThrowException<T> or(Predicate<T> predicateRule) {
     couldSatisfy(predicateRule);
     return this;
   }
 
   @Override
-  public CouldMessage<T> orThrow(Function<String, ? extends RuntimeException> exceptionFunction) {
+  public CouldMessage<T> orElseThrow(Function<String, ? extends RuntimeException> exceptionFunction) {
     this.exceptionFunction = exceptionFunction;
     return this;
   }
 
   @Override // TODO: Do I need this and butWas()
-  public CouldConnectorOrValidate<T> withMessage(UnaryOperator<String> messageFunction) {
+  public CouldConnectorOrValidate<T> withExceptionMessage(UnaryOperator<String> exceptionMessageFunction) {
     // TODO: if exceptionFunction is null, then set it here ?? thus avoid to methods with message
-    this.validationLogic.buildRule(messageFunction, this.exceptionFunction, this.predicate, this.validationRules);
+    this.validationLogic.buildRule(exceptionMessageFunction, this.exceptionFunction, this.predicate, this.validationRules);
     return this;
   }
 
   @Override // TODO Do i need this??? Will need better name ie because?since?
   public CouldConnectorOrValidate<T> butWas(UnaryOperator<String> messageFunction) {
     this.exceptionFunction = ValidationException::new;
-    withMessage(messageFunction);
+    withExceptionMessage(messageFunction);
     return this;
   }
 
   @Override
-  public ConsumerTerminal<T> thenConsume(Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer) {
+  public ConsumerTerminal<T> useConsumer(Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer) {
     check(isNull(consumer), "A consumer must be provided");
     this.optionalConsumer = Optional.of(consumer);
     return this;
   }
 
   @Override
-  public T validateOrThrowNotify() {
-    return this.validationLogic.validateOrThrowNotify(
+  public T throwNotificationIfNotValid() {
+    return this.validationLogic.throwNotificationIfNotValid(
         this.input,
         this.validationRules,
         this.optionalConsumer,
@@ -84,21 +79,21 @@ final class Valid8OrCouldSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow<T> imp
   }
 
   @Override
-  public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
-                                 BiFunction<T, String, String> messageFunction) {
-    return this.validationLogic.validateOrThrowNotify(
+  public T throwNotificationIfNotValid(Function<String, ? extends RuntimeException> exceptionFunction,
+                                       BiFunction<T, String, String> exceptionMessageFunction) {
+    return this.validationLogic.throwNotificationIfNotValid(
         this.input,
         this.validationRules,
         exceptionFunction,
-        messageFunction,
+        exceptionMessageFunction,
         this.optionalConsumer,
         failedRules -> failedRules.size() == this.validationRules.size()
     );
   }
 
   @Override
-  public T validate() { // TODO : change to toBeValid(), validateInput(),
-    return this.validationLogic.validate(
+  public T throwIfNotValid() {
+    return this.validationLogic.throwIfNotValid(
         this.input,
         this.validationRules,
         this.optionalConsumer,
@@ -106,8 +101,8 @@ final class Valid8OrCouldSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow<T> imp
   }
 
   @Override
-  public Optional<T> validateThenReturnOptional() { // TODO : change to toBeValidOptional()
-    var validatedInput = validate();
+  public Optional<T> throwIfNotValidReturnOptional() {
+    var validatedInput = throwIfNotValid();
     return isNull(validatedInput) ? empty() : Optional.of(validatedInput);
   }
 
@@ -127,7 +122,7 @@ final class Valid8OrCouldSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow<T> imp
   }
 
   @Override
-  public boolean isInvalid() {
+  public boolean isNotValid() {
     return !isValid();
   }
 }

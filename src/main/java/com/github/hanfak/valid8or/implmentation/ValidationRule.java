@@ -1,8 +1,6 @@
 package com.github.hanfak.valid8or.implmentation;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Value;
 
 import java.util.function.UnaryOperator;

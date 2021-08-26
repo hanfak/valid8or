@@ -16,9 +16,9 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
     void usingCustomExceptionWithCustomMessageUsingInput() {
       assertThat(
           forInput(4)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validate()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwIfNotValid()
       ).isEqualTo(4);
     }
 
@@ -28,7 +28,7 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
           forInput(4)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validate()
+              .throwIfNotValid()
       ).isEqualTo(4);
     }
   }
@@ -40,9 +40,9 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
     void usingCustomExceptionWithCustomMessageUsingInputThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validate()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwIfNotValid()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(IllegalStateException.class);
@@ -54,7 +54,7 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
           forInput(3)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validate()
+              .throwIfNotValid()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(ValidationException.class);

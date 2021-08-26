@@ -18,9 +18,9 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
     void usingCustomExceptionWithCustomMessageUsingInput() {
       assertThat(
           forInput(4)
-              .couldSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validateThenReturnOptional()
+              .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwIfNotValidReturnOptional()
       ).isEqualTo(Optional.of(4));
     }
 
@@ -30,7 +30,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
           forInput(4)
               .couldSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validateThenReturnOptional()
+              .throwIfNotValidReturnOptional()
       ).isEqualTo(Optional.of(4));
     }
   }
@@ -42,9 +42,9 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
     void usingCustomExceptionWithCustomMessageUsingInputThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .couldSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .validateThenReturnOptional()
+              .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .throwIfNotValidReturnOptional()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(IllegalStateException.class);
@@ -56,7 +56,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
           forInput(3)
               .couldSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validateThenReturnOptional()
+              .throwIfNotValidReturnOptional()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(ValidationException.class);

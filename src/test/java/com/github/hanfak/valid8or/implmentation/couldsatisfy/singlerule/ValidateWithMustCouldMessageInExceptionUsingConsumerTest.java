@@ -16,10 +16,10 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumer() {
       assertThat(
           forInput(4)
-              .couldSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validate()
+              .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwIfNotValid()
       ).isEqualTo(4);
     }
 
@@ -29,8 +29,8 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
           forInput(4)
               .couldSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validate()
+              .useConsumer(stubLogger::log)
+              .throwIfNotValid()
       ).isEqualTo(4);
     }
   }
@@ -42,10 +42,10 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumerThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .couldSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validate()
+              .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwIfNotValid()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(IllegalStateException.class);
@@ -62,8 +62,8 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
           forInput(3)
               .couldSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validate()
+              .useConsumer(stubLogger::log)
+              .throwIfNotValid()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(ValidationException.class);

@@ -8,8 +8,7 @@ import testinfrastructure.TestFixtures;
 import static com.github.hanfak.valid8or.implmentation.Valid8orMustSatisfyAllRules.forInput;
 
 class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest extends TestFixtures {
-  // TODO: Test where input from lambda arg is not used
-  // TODO: Test where input from lambda arg is not used, but variable is
+
   @Nested
   class ReturnsInputAsOptionalAndNoExceptionThrownOrConsumerUsedWhenInputIsValid {
 
@@ -17,10 +16,10 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumer() {
       assertThat(
           forInput(4)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateThenReturnOptional()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwIfNotValidReturnOptional()
       ).isPresent().containsInstanceOf(Integer.class).contains(4);
     }
 
@@ -30,8 +29,8 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
           forInput(4)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateThenReturnOptional()
+              .useConsumer(stubLogger::log)
+              .throwIfNotValidReturnOptional()
       ).isPresent().containsInstanceOf(Integer.class).contains(4);
     }
   }
@@ -43,10 +42,10 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumerThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateThenReturnOptional()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwIfNotValidReturnOptional()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(IllegalStateException.class);
@@ -63,8 +62,8 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
           forInput(3)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validate()
+              .useConsumer(stubLogger::log)
+              .throwIfNotValid()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(ValidationException.class);

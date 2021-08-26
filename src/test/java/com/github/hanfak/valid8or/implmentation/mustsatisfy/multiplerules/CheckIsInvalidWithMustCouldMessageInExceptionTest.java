@@ -5,43 +5,42 @@ import testinfrastructure.TestFixtures;
 
 import static com.github.hanfak.valid8or.implmentation.Valid8orMustSatisfyAllRules.forInput;
 
-// No use of consumer or exception thrown
 class CheckIsInvalidWithMustCouldMessageInExceptionTest extends TestFixtures {
-  // TODO paramtise for true/false assertion
+
   @Test
   void checksInputIsInvalidUsingCustomMessageOutsideException() {
     assertThat(
         forInput(4)
-            .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input: " + input)
-            .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-            .withMessage(input -> "Is not greater than 2, for input: " + input)
-            .isInvalid()
+            .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .and(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+            .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+            .isNotValid()
     ).isFalse();
     assertThat(
         forInput(4)
-            .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-            .withMessage(input -> "Is not greater than 2, for input: " + input)
-            .andSatisfies(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input: " + input)
-            .isInvalid()
+            .mustSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+            .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+            .and(isEven).orElseThrow(IllegalStateException::new)
+            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .isNotValid()
     ).isFalse();
 
     assertThat(
         forInput(1)
-            .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input: " + input)
-            .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-            .withMessage(input -> "Is not greater than 2, for input: " + input)
-            .isInvalid()
+            .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .and(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+            .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+            .isNotValid()
     ).isTrue();
     assertThat(
         forInput(1)
-            .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-            .withMessage(input -> "Is not greater than 2, for input: " + input)
-            .andSatisfies(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input: " + input)
-            .isInvalid()
+            .mustSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+            .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+            .and(isEven).orElseThrow(IllegalStateException::new)
+            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .isNotValid()
     ).isTrue();
   }
 
@@ -51,34 +50,34 @@ class CheckIsInvalidWithMustCouldMessageInExceptionTest extends TestFixtures {
         forInput(4)
             .mustSatisfy(isEven)
             .butWas(input -> "Is not even, for input: " + input)
-            .andSatisfies(isGreaterThan2)
+            .and(isGreaterThan2)
             .butWas(input -> "Is not greater than 2, for input: " + input)
-            .isInvalid()
+            .isNotValid()
     ).isFalse();
     assertThat(
         forInput(4)
             .mustSatisfy(isGreaterThan2)
             .butWas(input -> "Is not greater than 2, for input: " + input)
-            .andSatisfies(isEven)
+            .and(isEven)
             .butWas(input -> "Is not even, for input: " + input)
-            .isInvalid()
+            .isNotValid()
     ).isFalse();
 
     assertThat(
         forInput(1)
             .mustSatisfy(isEven)
             .butWas(input -> "Is not even, for input: " + input)
-            .andSatisfies(isGreaterThan2)
+            .and(isGreaterThan2)
             .butWas(input -> "Is not greater than 2, for input: " + input)
-            .isInvalid()
+            .isNotValid()
     ).isTrue();
     assertThat(
         forInput(1)
             .mustSatisfy(isGreaterThan2)
             .butWas(input -> "Is not greater than 2, for input: " + input)
-            .andSatisfies(isEven)
+            .and(isEven)
             .butWas(input -> "Is not even, for input: " + input)
-            .isInvalid()
+            .isNotValid()
     ).isTrue();
   }
 }

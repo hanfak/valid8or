@@ -15,22 +15,22 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumer() {
       assertThat(
           forInput(4)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .andSatisfies(isGreaterThan2).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .and(isGreaterThan2).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       ).isEqualTo(4);
 
       assertThat(
           forInput(4)
-              .mustSatisfy(isGreaterThan2).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .andSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .mustSatisfy(isGreaterThan2).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .and(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       ).isEqualTo(4);
     }
 
@@ -40,19 +40,19 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
           forInput(4)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .andSatisfies(isGreaterThan2)
+              .and(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       ).isEqualTo(4);
 
       assertThat(
           forInput(4)
               .mustSatisfy(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .andSatisfies(isEven)
+              .and(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .validateOrThrowNotify()
+              .throwNotificationIfNotValid()
       ).isEqualTo(4);
     }
   }
@@ -64,12 +64,12 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
     void usingCustomExceptionWithCustomMessageUsingInputAndConsumerThrowsCustomException() {
       assertThatThrownBy(() ->
           forInput(3)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .and(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -81,12 +81,12 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
 
       assertThatThrownBy(() ->
           forInput(2)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .and(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '2', the following problems occurred: 'Is not greater than 2, for input: 2'")
           .isInstanceOf(ValidationException.class);
@@ -98,12 +98,12 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
 
       assertThatThrownBy(() ->
           forInput(1)
-              .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .andSatisfies(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .and(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1, Is not greater than 2, for input: 1'")
           .isInstanceOf(ValidationException.class);
@@ -116,12 +116,12 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
 
       assertThatThrownBy(() ->
           forInput(3)
-              .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .andSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .mustSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .and(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -133,12 +133,12 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
 
       assertThatThrownBy(() ->
           forInput(2)
-              .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .andSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .mustSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .and(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '2', the following problems occurred: 'Is not greater than 2, for input: 2'")
           .isInstanceOf(ValidationException.class);
@@ -150,12 +150,12 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
 
       assertThatThrownBy(() ->
           forInput(1)
-              .mustSatisfy(isGreaterThan2).orThrow(IllegalArgumentException::new)
-              .withMessage(input -> "Is not greater than 2, for input: " + input)
-              .andSatisfies(isEven).orThrow(IllegalStateException::new)
-              .withMessage(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .mustSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
+              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .and(isEven).orElseThrow(IllegalStateException::new)
+              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1, Is not even, for input: 1'")
           .isInstanceOf(ValidationException.class);
@@ -172,10 +172,10 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
           forInput(3)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .andSatisfies(isGreaterThan2)
+              .and(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -189,10 +189,10 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
           forInput(2)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .andSatisfies(isGreaterThan2)
+              .and(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '2', the following problems occurred: 'Is not greater than 2, for input: 2'")
           .isInstanceOf(ValidationException.class);
@@ -206,10 +206,10 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
           forInput(1)
               .mustSatisfy(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .andSatisfies(isGreaterThan2)
+              .and(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1, Is not greater than 2, for input: 1'")
           .isInstanceOf(ValidationException.class);
@@ -223,10 +223,10 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
           forInput(3)
               .mustSatisfy(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .andSatisfies(isEven)
+              .and(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -240,10 +240,10 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
           forInput(2)
               .mustSatisfy(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .andSatisfies(isEven)
+              .and(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '2', the following problems occurred: 'Is not greater than 2, for input: 2'")
           .isInstanceOf(ValidationException.class);
@@ -257,10 +257,10 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
           forInput(1)
               .mustSatisfy(isGreaterThan2)
               .butWas(input -> "Is not greater than 2, for input: " + input)
-              .andSatisfies(isEven)
+              .and(isEven)
               .butWas(input -> "Is not even, for input: " + input)
-              .thenConsume(stubLogger::log)
-              .validateOrThrowNotify()
+              .useConsumer(stubLogger::log)
+              .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1, Is not even, for input: 1'")
           .isInstanceOf(ValidationException.class);

@@ -5,23 +5,22 @@ import testinfrastructure.TestFixtures;
 
 import static com.github.hanfak.valid8or.implmentation.Valid8orMustSatisfyAllRules.forInput;
 
-// No use of consumer or exception thrown
 class CheckIsInvalidWithMustCouldMessageInExceptionTest extends TestFixtures {
-  // TODO paramtise for true/false assertion
+
   @Test
   void checksInputIsInvalidUsingCustomMessageOutsideException() {
     assertThat(
         forInput(4)
-            .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input: " + input)
-            .isInvalid()
+            .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .isNotValid()
     ).isFalse();
 
     assertThat(
         forInput(3)
-            .mustSatisfy(isEven).orThrow(IllegalStateException::new)
-            .withMessage(input -> "Is not even, for input: " + input)
-            .isInvalid()
+            .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
+            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .isNotValid()
     ).isTrue();
   }
 
@@ -31,14 +30,14 @@ class CheckIsInvalidWithMustCouldMessageInExceptionTest extends TestFixtures {
         forInput(4)
             .mustSatisfy(isEven)
             .butWas(input -> "Is not even, for input: " + input)
-            .isInvalid()
+            .isNotValid()
     ).isFalse();
 
     assertThat(
         forInput(3)
             .mustSatisfy(isEven)
             .butWas(input -> "Is not even, for input: " + input)
-            .isInvalid()
+            .isNotValid()
     ).isTrue();
   }
 }
