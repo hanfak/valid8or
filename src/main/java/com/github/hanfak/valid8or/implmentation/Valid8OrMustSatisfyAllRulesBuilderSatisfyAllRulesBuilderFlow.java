@@ -10,7 +10,7 @@ import static java.util.Objects.isNull;
 import static java.util.Optional.empty;
 import static java.util.function.Predicate.not;
 
-final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMustMustSatisfyAllRulesBuilderFlowMust<T> {
+final class Valid8OrMustSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow<T> implements Valid8OrMustMustSatisfyAllRulesBuilderFlow<T> {
 
   private T input;
   private Predicate<T> predicate;
@@ -22,7 +22,7 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
   private final Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>>
       thereExistsOneFailedRule = not(List::isEmpty);
 
-  Valid8OrMustMustSatisfyAllRulesBuilderMust(ValidationRules<T> validationRules, ValidationLogic<T> validationLogic) {
+  Valid8OrMustSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow(ValidationRules<T> validationRules, ValidationLogic<T> validationLogic) {
     this.validationRules = validationRules;
     this.validationLogic = validationLogic;
   }
@@ -78,7 +78,6 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     return this;
   }
 
-  @SuppressWarnings("Convert2MethodRef")// For readability
   @Override
   public T validateOrThrowNotify() {
     return this.validationLogic.validateOrThrowNotify(
@@ -89,7 +88,6 @@ final class Valid8OrMustMustSatisfyAllRulesBuilderMust<T> implements Valid8OrMus
     );
   }
 
-  @SuppressWarnings("Convert2MethodRef")// For readability
   @Override
   public T validateOrThrowNotify(Function<String, ? extends RuntimeException> exceptionFunction,
                                  BiFunction<T, String, String> messageFunction) {

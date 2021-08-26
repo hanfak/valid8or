@@ -1,18 +1,14 @@
 package com.github.hanfak.valid8or.implmentation;
 
-import java.util.Objects;
+class Utils {
 
-// TODO better name
-class Utils<T> {
-
-  String nullSafeInput(T input) {
-    return Objects.isNull(input) ? null : input.toString();
+  public Utils() {
+    throw new IllegalStateException("No instances!");
   }
 
-  // TODO remove static method
-  static void check(final boolean argIsNull, final String message) {
-    if (argIsNull) {
-      throw new IllegalArgumentException(message);
+  static void check(final boolean inputIsNull, final String exceptionMessage) {
+    if (inputIsNull) {
+      throw new IllegalArgumentException(exceptionMessage);
     }
   }
 }

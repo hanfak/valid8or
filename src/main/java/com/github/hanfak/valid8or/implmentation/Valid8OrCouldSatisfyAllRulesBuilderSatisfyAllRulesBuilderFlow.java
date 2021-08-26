@@ -8,7 +8,7 @@ import static com.github.hanfak.valid8or.implmentation.Utils.check;
 import static java.util.Objects.isNull;
 import static java.util.Optional.empty;
 
-final class Valid8OrCouldCouldSatisfyAllRulesBuilderCould<T> implements Valid8OrCouldCouldSatisfyAllRulesBuilderFlowCould<T> {
+final class Valid8OrCouldSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow<T> implements Valid8OrCouldCouldSatisfyAllRulesBuilderFlow<T> {
 
   private T input;
   private Predicate<T> predicate;
@@ -18,7 +18,7 @@ final class Valid8OrCouldCouldSatisfyAllRulesBuilderCould<T> implements Valid8Or
   private final ValidationRules<T> validationRules;
   private final ValidationLogic<T> validationLogic;
 
-  Valid8OrCouldCouldSatisfyAllRulesBuilderCould(ValidationRules<T> validationRules, ValidationLogic<T> validationLogic) {
+  Valid8OrCouldSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow(ValidationRules<T> validationRules, ValidationLogic<T> validationLogic) {
     this.validationRules = validationRules;
     this.validationLogic = validationLogic;
   }

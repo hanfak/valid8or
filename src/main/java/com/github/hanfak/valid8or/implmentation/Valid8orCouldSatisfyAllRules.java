@@ -6,9 +6,9 @@ public final class Valid8orCouldSatisfyAllRules {
   }
 
   public static <T> CouldSatisfy<T> forInput(T input) {
-    return new Valid8OrCouldCouldSatisfyAllRulesBuilderCould<>(
+    return new Valid8OrCouldSatisfyAllRulesBuilderSatisfyAllRulesBuilderFlow<>(
         new ValidationRules<T>(),
-        new ValidationLogic<>(new Utils<>()))
+        new ValidationLogic<>())
         .forInput(input);
   }
 }

@@ -19,13 +19,7 @@ public class ValidationLogic<T> {
 
   private static final String MISSING_MESSAGE_FUNCTION_EXCEPTION_MESSAGE = "Message function must be provided";
   private static final String MISSING_EXCEPTION_FUNCTION_EXCEPTION_MESSAGE = "An exception function must be provided";
-  private static final String MISSING_RULE_EXCEPTION_MESSAGE = "Rule must be provided";
-
-  private final Utils<T> utils;
-
-  public ValidationLogic(Utils<T> utils) {
-    this.utils = utils;
-  }
+  private static final String MISSING_RULE_EXCEPTION_MESSAGE = "Predicate rule must be provided";
 
   void buildRule(UnaryOperator<String> messageFunction,
                  Function<String, ? extends RuntimeException> exceptionFunction,
@@ -83,7 +77,9 @@ public class ValidationLogic<T> {
     return emptySet();
   }
 
-  boolean isValid(T input, ValidationRules<T> validationRules, Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
+  boolean isValid(T input,
+                  ValidationRules<T> validationRules,
+                  Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
     return failedRulesPredicate.test(findFailedRules(validationRules, input));
   }
 
@@ -141,7 +137,7 @@ public class ValidationLogic<T> {
     return predicateValidationRule -> {
       throw predicateValidationRule.getException()
           .compose(predicateValidationRule.getMessage())
-          .apply(utils.nullSafeInput(input)); // ISSUES: if input does not have toString Overridden it will return method ref in exception message
+          .apply(nullSafeInput(input)); // ISSUES: if input does not have toString() Overridden it will return method ref in exception message
     };
   }
 
@@ -149,7 +145,11 @@ public class ValidationLogic<T> {
       List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules, T input) {
     return failedRules.stream()
         .map(ValidationRule::getMessage)
-        .map(messageFunction -> messageFunction.apply(utils.nullSafeInput(input)))
+        .map(messageFunction -> messageFunction.apply(nullSafeInput(input)))
         .collect(toSet());
+  }
+
+  String nullSafeInput(T input) {
+    return isNull(input) ? null : input.toString();
   }
 }

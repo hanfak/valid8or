@@ -15,7 +15,7 @@ class Valid8OrMustSatisfyAllValidationRulesBuilderTest extends TestFixtures {
             .mustSatisfy(null)
             .butWas(input -> "not legal"))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Rule must be provided");
+        .hasMessage("Predicate rule must be provided");
   }
 
   @Test
@@ -25,7 +25,7 @@ class Valid8OrMustSatisfyAllValidationRulesBuilderTest extends TestFixtures {
             .mustSatisfy(isEven).butWas(input -> "not legal")
             .andSatisfies(null).butWas(input -> "not legal"))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Rule must be provided");
+        .hasMessage("Predicate rule must be provided");
   }
 
   @Test
