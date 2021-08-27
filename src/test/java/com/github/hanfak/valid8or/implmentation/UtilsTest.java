@@ -6,13 +6,6 @@ import org.junit.jupiter.api.Test;
 
 class UtilsTest {
 
-  @Test
-  void shouldNotBeAbleToCreateInstance() {
-    Assertions.assertThatThrownBy(Utils::new)
-        .hasMessage("No instances!")
-        .isInstanceOf(IllegalStateException.class);
-  }
-
   @SuppressWarnings("ConstantConditions")
   @Test
   void shouldThrowExceptionWithCustomMessageWhenInputIsNull() {
