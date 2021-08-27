@@ -21,7 +21,7 @@ Add it in your root build.gradle at the end of repositories:
 Add the dependency
 ```groovy
 	dependencies {
-		implementation 'com.github.hanfak:valid8or:0.0.5'
+		implementation 'com.github.hanfak:valid8or:0.0.6'
 	}
 ```
 ### Maven
@@ -40,7 +40,7 @@ Add the dependency
     <dependency>
         <groupId>com.github.hanfak</groupId>
         <artifactId>valid8or</artifactId>
-        <version>0.0.5</version>
+        <version>0.0.6</version>
     </dependency>
     ...
 </dependencies>
