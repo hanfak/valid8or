@@ -11,9 +11,9 @@ class ValidationRule<R,E> {
 
   R rule;
   E exception;
-  UnaryOperator<String> message;
+  UnaryOperator<String> exceptionMessageFunction;
 
-  static <R, E> ValidationRule<R, E> validationRule(R rule, E exception, UnaryOperator<String> message) {
-    return new ValidationRule<>(rule, exception, message);
+  static <R, E> ValidationRule<R, E> validationRule(R rule, E exception, UnaryOperator<String> exceptionMessageFunction) {
+    return new ValidationRule<>(rule, exception, exceptionMessageFunction);
   }
 }

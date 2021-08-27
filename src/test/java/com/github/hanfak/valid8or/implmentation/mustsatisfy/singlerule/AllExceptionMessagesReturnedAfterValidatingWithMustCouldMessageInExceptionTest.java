@@ -29,14 +29,14 @@ class AllExceptionMessagesReturnedAfterValidatingWithMustCouldMessageInException
     assertThat(
         forInput(4)
             .mustSatisfy(isEven)
-            .butWas(input -> "Is not even, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
     ).isEmpty();
 
     assertThat(
         forInput(3)
             .mustSatisfy(isEven)
-            .butWas(input -> "Is not even, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
     ).containsOnly("Is not even, for input: 3");
   }

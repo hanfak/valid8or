@@ -6,5 +6,5 @@ import java.util.function.UnaryOperator;
 public interface CouldThrowException<T> {
   CouldMessage<T> orElseThrow(Function<String, ? extends RuntimeException> exceptionFunction);
 
-  CouldConnectorOrValidate<T> butWas(UnaryOperator<String> messageFunction);
+  CouldConnectorOrValidate<T> orThrowExceptionWith(UnaryOperator<String> exceptionMessageFunction);
 }

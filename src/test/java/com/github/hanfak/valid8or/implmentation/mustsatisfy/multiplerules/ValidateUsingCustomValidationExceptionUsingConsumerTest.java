@@ -43,9 +43,9 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
       assertThat(
           forInput(4)
               .mustSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
@@ -54,9 +54,9 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
       assertThat(
           forInput(4)
               .mustSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .and(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
@@ -115,13 +115,13 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
-          .hasMessage("All problems are, for input: 1, with messages: 'Is not even, for input: 1, Is not greater than 2, for input: 1'")
+          .hasMessage("All problems are, for input: 1, with messages: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
           .isInstanceOf(CustomException.class);
       assertThat(stubLogger.lastLogEventException())
           .isInstanceOf(CustomException.class)
-          .hasMessage("All problems are, for input: 1, with messages: 'Is not even, for input: 1, Is not greater than 2, for input: 1'");
+          .hasMessage("All problems are, for input: 1, with messages: 'Is not even, for input: 1; Is not greater than 2, for input: 1'");
       assertThat(stubLogger.lastLogEventMessage())
-          .isEqualTo("For input '1', was not valid because: 'All problems are, for input: 1, with messages: 'Is not even, for input: 1, Is not greater than 2, for input: 1''");
+          .isEqualTo("For input '1', was not valid because: 'All problems are, for input: 1, with messages: 'Is not even, for input: 1; Is not greater than 2, for input: 1''");
 
 
       assertThatThrownBy(() ->
@@ -170,13 +170,13 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
-          .hasMessage("All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1, Is not even, for input: 1'")
+          .hasMessage("All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")
           .isInstanceOf(CustomException.class);
       assertThat(stubLogger.lastLogEventException())
           .isInstanceOf(CustomException.class)
-          .hasMessage("All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1, Is not even, for input: 1'");
+          .hasMessage("All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1; Is not even, for input: 1'");
       assertThat(stubLogger.lastLogEventMessage())
-          .isEqualTo("For input '1', was not valid because: 'All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1, Is not even, for input: 1''");
+          .isEqualTo("For input '1', was not valid because: 'All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1; Is not even, for input: 1''");
     }
 
     @Test
@@ -184,9 +184,9 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
       assertThatThrownBy(() ->
           forInput(3)
               .mustSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
@@ -202,9 +202,9 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
       assertThatThrownBy(() ->
           forInput(2)
               .mustSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
@@ -220,28 +220,28 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
       assertThatThrownBy(() ->
           forInput(1)
               .mustSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
-          .hasMessage("All problems are, for input: 1, with messages: 'Is not even, for input: 1, Is not greater than 2, for input: 1'")
+          .hasMessage("All problems are, for input: 1, with messages: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
           .isInstanceOf(CustomException.class);
       assertThat(stubLogger.lastLogEventException())
           .isInstanceOf(CustomException.class)
-          .hasMessage("All problems are, for input: 1, with messages: 'Is not even, for input: 1, Is not greater than 2, for input: 1'");
+          .hasMessage("All problems are, for input: 1, with messages: 'Is not even, for input: 1; Is not greater than 2, for input: 1'");
       assertThat(stubLogger.lastLogEventMessage())
-          .isEqualTo("For input '1', was not valid because: 'All problems are, for input: 1, with messages: 'Is not even, for input: 1, Is not greater than 2, for input: 1''");
+          .isEqualTo("For input '1', was not valid because: 'All problems are, for input: 1, with messages: 'Is not even, for input: 1; Is not greater than 2, for input: 1''");
 
 
       assertThatThrownBy(() ->
           forInput(3)
               .mustSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .and(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
@@ -257,9 +257,9 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
       assertThatThrownBy(() ->
           forInput(2)
               .mustSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .and(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
@@ -275,20 +275,20 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
       assertThatThrownBy(() ->
           forInput(1)
               .mustSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .and(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
-          .hasMessage("All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1, Is not even, for input: 1'")
+          .hasMessage("All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")
           .isInstanceOf(CustomException.class);
       assertThat(stubLogger.lastLogEventException())
           .isInstanceOf(CustomException.class)
-          .hasMessage("All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1, Is not even, for input: 1'");
+          .hasMessage("All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1; Is not even, for input: 1'");
       assertThat(stubLogger.lastLogEventMessage())
-          .isEqualTo("For input '1', was not valid because: 'All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1, Is not even, for input: 1''");
+          .isEqualTo("For input '1', was not valid because: 'All problems are, for input: 1, with messages: 'Is not greater than 2, for input: 1; Is not even, for input: 1''");
     }
   }
 }

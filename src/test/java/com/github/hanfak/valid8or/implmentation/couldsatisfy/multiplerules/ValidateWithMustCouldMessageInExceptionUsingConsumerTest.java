@@ -44,9 +44,9 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
       assertThat(
           forInput(value)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwIfNotValid()
       ).isEqualTo(value);
@@ -54,9 +54,9 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
       assertThat(
           forInput(value)
               .couldSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwIfNotValid()
       ).isEqualTo(value);
@@ -108,9 +108,9 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwIfNotValid()
       )
@@ -125,9 +125,9 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwIfNotValid()
       )

@@ -42,18 +42,18 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
       assertThat(
           forInput(value)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .throwIfNotValid()
       ).isEqualTo(value);
 
       assertThat(
           forInput(value)
               .couldSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwIfNotValid()
       ).isEqualTo(value);
     }
@@ -92,9 +92,9 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .throwIfNotValid()
       )
           .hasMessage("Is not even, for input: 1")
@@ -103,9 +103,9 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwIfNotValid()
       )
           .hasMessage("Is not greater than 2, for input: 1")

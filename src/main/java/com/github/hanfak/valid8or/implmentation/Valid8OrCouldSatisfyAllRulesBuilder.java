@@ -47,17 +47,16 @@ final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8OrCouldSatis
     return this;
   }
 
-  @Override // TODO: Do I need this and butWas()
+  @Override
   public CouldConnectorOrValidate<T> withExceptionMessage(UnaryOperator<String> exceptionMessageFunction) {
-    // TODO: if exceptionFunction is null, then set it here ?? thus avoid to methods with message
     this.validationLogic.buildRule(exceptionMessageFunction, this.exceptionFunction, this.predicate, this.validationRules);
     return this;
   }
 
-  @Override // TODO Do i need this??? Will need better name ie because?since?
-  public CouldConnectorOrValidate<T> butWas(UnaryOperator<String> messageFunction) {
+  @Override
+  public CouldConnectorOrValidate<T> orThrowExceptionWith(UnaryOperator<String> exceptionMessageFunction) {
     this.exceptionFunction = ValidationException::new;
-    withExceptionMessage(messageFunction);
+    withExceptionMessage(exceptionMessageFunction);
     return this;
   }
 
@@ -68,6 +67,7 @@ final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8OrCouldSatis
     return this;
   }
 
+  // TODO: naming
   @Override
   public T throwNotificationIfNotValid() {
     return this.validationLogic.throwNotificationIfNotValid(
@@ -101,7 +101,7 @@ final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8OrCouldSatis
   }
 
   @Override
-  public Optional<T> throwIfNotValidReturnOptional() {
+  public Optional<T> throwIfNotValidOrReturnOptional() {
     var validatedInput = throwIfNotValid();
     return isNull(validatedInput) ? empty() : Optional.of(validatedInput);
   }

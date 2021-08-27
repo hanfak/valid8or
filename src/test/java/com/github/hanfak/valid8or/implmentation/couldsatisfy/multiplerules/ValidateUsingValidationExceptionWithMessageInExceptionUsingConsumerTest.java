@@ -44,9 +44,9 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThat(
           forInput(value)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid()
       ).isEqualTo(value);
@@ -54,9 +54,9 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThat(
           forInput(value)
               .couldSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwNotificationIfNotValid()
       ).isEqualTo(value);
     }
@@ -76,13 +76,13 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid()
       )
-          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1, Is not greater than 2, for input: 1'")
+          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
           .isInstanceOf(ValidationException.class);
       assertThat(stubLogger.lastLogEventException())
           .isInstanceOf(ValidationException.class)
-          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1, Is not greater than 2, for input: 1'");
+          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'");
       assertThat(stubLogger.lastLogEventMessage())
-          .isEqualTo("For input '1', was not valid because: 'For input: '1', the following problems occurred: 'Is not even, for input: 1, Is not greater than 2, for input: 1''");
+          .isEqualTo("For input '1', was not valid because: 'For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1''");
 
       assertThatThrownBy(() ->
           forInput(1)
@@ -93,13 +93,13 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid()
       )
-          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1, Is not even, for input: 1'")
+          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")
           .isInstanceOf(ValidationException.class);
       assertThat(stubLogger.lastLogEventException())
           .isInstanceOf(ValidationException.class)
-          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1, Is not even, for input: 1'");
+          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'");
       assertThat(stubLogger.lastLogEventMessage())
-          .isEqualTo("For input '1', was not valid because: 'For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1, Is not even, for input: 1''");
+          .isEqualTo("For input '1', was not valid because: 'For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1''");
     }
 
     @Test
@@ -107,36 +107,36 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid()
       )
-          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1, Is not greater than 2, for input: 1'")
+          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
           .isInstanceOf(ValidationException.class);
       assertThat(stubLogger.lastLogEventException())
           .isInstanceOf(ValidationException.class)
-          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1, Is not greater than 2, for input: 1'");
+          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'");
       assertThat(stubLogger.lastLogEventMessage())
-          .isEqualTo("For input '1', was not valid because: 'For input: '1', the following problems occurred: 'Is not even, for input: 1, Is not greater than 2, for input: 1''");
+          .isEqualTo("For input '1', was not valid because: 'For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1''");
 
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid()
       )
-          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1, Is not even, for input: 1'")
+          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")
           .isInstanceOf(ValidationException.class);
       assertThat(stubLogger.lastLogEventException())
           .isInstanceOf(ValidationException.class)
-          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1, Is not even, for input: 1'");
+          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'");
       assertThat(stubLogger.lastLogEventMessage())
-          .isEqualTo("For input '1', was not valid because: 'For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1, Is not even, for input: 1''");
+          .isEqualTo("For input '1', was not valid because: 'For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1''");
     }
   }
 }

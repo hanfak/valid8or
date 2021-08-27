@@ -28,7 +28,7 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
       assertThat(
           forInput(4)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwIfNotValid()
       ).isEqualTo(4);
     }
@@ -55,7 +55,7 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
       assertThatThrownBy(() ->
           forInput(3)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwIfNotValid()
       )
           .hasMessage("Is not even, for input: 3")

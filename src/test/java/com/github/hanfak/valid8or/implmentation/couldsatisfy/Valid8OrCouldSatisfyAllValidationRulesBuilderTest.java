@@ -12,7 +12,7 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
   void coudSatisfiesMethodCannotAcceptNullArguments() {
     assertThatThrownBy(() ->
         forInput(4)
-            .couldSatisfy(null).butWas(input -> "not legal"))
+            .couldSatisfy(null).orThrowExceptionWith(input -> "not legal"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Predicate rule must be provided");
   }
@@ -21,9 +21,9 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
   void andSatisfiesMethodCannotAcceptNullArguments() {
     assertThatThrownBy(() ->
         forInput(4)
-            .couldSatisfy(isEven).butWas(input -> "not legal")
+            .couldSatisfy(isEven).orThrowExceptionWith(input -> "not legal")
             .or(null)
-            .butWas(input -> "not legal"))
+            .orThrowExceptionWith(input -> "not legal"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Predicate rule must be provided");
   }
@@ -55,7 +55,7 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(4)
             .couldSatisfy(isEven)
-            .butWas(null))
+            .orThrowExceptionWith(null))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Message function must be provided");
   }
@@ -65,7 +65,7 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(4)
             .couldSatisfy(isEven)
-            .butWas(input -> "not legal")
+            .orThrowExceptionWith(input -> "not legal")
             .useConsumer(null))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("A consumer must be provided");
@@ -75,7 +75,7 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(4)
             .couldSatisfy(isEven)
-            .butWas(input -> "not legal")
+            .orThrowExceptionWith(input -> "not legal")
             .throwNotificationIfNotValid(null, (input, error) -> "some message"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("An exception function must be provided");
@@ -83,7 +83,7 @@ class Valid8OrCouldSatisfyAllValidationRulesBuilderTest extends TestFixtures {
     assertThatThrownBy(() ->
         forInput(4)
             .couldSatisfy(isEven)
-            .butWas(input -> "not legal")
+            .orThrowExceptionWith(input -> "not legal")
             .throwNotificationIfNotValid(CustomException::new, null))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Message function must be provided");

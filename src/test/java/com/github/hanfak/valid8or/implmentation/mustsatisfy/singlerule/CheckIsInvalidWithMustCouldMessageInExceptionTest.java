@@ -29,14 +29,14 @@ class CheckIsInvalidWithMustCouldMessageInExceptionTest extends TestFixtures {
     assertThat(
         forInput(4)
             .mustSatisfy(isEven)
-            .butWas(input -> "Is not even, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not even, for input: " + input)
             .isNotValid()
     ).isFalse();
 
     assertThat(
         forInput(3)
             .mustSatisfy(isEven)
-            .butWas(input -> "Is not even, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not even, for input: " + input)
             .isNotValid()
     ).isTrue();
   }

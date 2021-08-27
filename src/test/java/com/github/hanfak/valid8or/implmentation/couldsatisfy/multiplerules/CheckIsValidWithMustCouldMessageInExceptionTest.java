@@ -52,34 +52,34 @@ class CheckIsValidWithMustCouldMessageInExceptionTest extends TestFixtures {
     assertThat(
         forInput(value)
             .couldSatisfy(isEven)
-            .butWas(input -> "Is not even, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not even, for input: " + input)
             .or(isGreaterThan2)
-            .butWas(input -> "Is not greater than 2, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
             .isValid()
     ).isTrue();
     assertThat(
         forInput(value)
             .couldSatisfy(isGreaterThan2)
-            .butWas(input -> "Is not greater than 2, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
             .or(isEven)
-            .butWas(input -> "Is not even, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not even, for input: " + input)
             .isValid()
     ).isTrue();
 
     assertThat(
         forInput(1)
             .couldSatisfy(isEven)
-            .butWas(input -> "Is not even, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not even, for input: " + input)
             .or(isGreaterThan2)
-            .butWas(input -> "Is not greater than 2, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
             .isValid()
     ).isFalse();
     assertThat(
         forInput(1)
             .couldSatisfy(isGreaterThan2)
-            .butWas(input -> "Is not greater than 2, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
             .or(isEven)
-            .butWas(input -> "Is not even, for input: " + input)
+            .orThrowExceptionWith(input -> "Is not even, for input: " + input)
             .isValid()
     ).isFalse();
   }

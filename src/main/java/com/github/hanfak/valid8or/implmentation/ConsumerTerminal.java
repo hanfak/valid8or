@@ -5,12 +5,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public interface ConsumerTerminal<T> {
-  T throwNotificationIfNotValid(); //validateUsingNotification
+  T throwNotificationIfNotValid();
 
   T throwNotificationIfNotValid(Function<String, ? extends RuntimeException> exceptionFunction,
                                 BiFunction<T, String, String> exceptionMessageFunction);
 
-  T throwIfNotValid(); //validate, toBeValid
+  T throwIfNotValid();
 
-  Optional<T> throwIfNotValidReturnOptional(); //validateReturnOptional, toBeValidOptional
+  Optional<T> throwIfNotValidOrReturnOptional();
 }

@@ -27,7 +27,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
       assertThat(
           forInput(4)
               .mustSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwNotificationIfNotValid()
       ).isEqualTo(4);
     }
@@ -53,7 +53,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
       assertThatThrownBy(() ->
           forInput(3)
               .mustSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwNotificationIfNotValid()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")

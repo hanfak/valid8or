@@ -51,18 +51,16 @@ final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfy
     return this;
   }
 
-  @Override // TODO: Do I need this and butWas()
+  @Override
   public MustConnectorOrValidate<T> withExceptionMessage(UnaryOperator<String> exceptionMessageFunction) {
-    // TODO: if exceptionFunction is null, then set it here ?? thus avoid to methods with message
     this.validationLogic.buildRule(exceptionMessageFunction, this.exceptionFunction, this.predicate, this.validationRules);
     return this;
   }
 
-  // TODO Do i need this??? Will need better name ie because?since?
   @Override
-  public MustConnectorOrValidate<T> butWas(UnaryOperator<String> messageFunction) {
+  public MustConnectorOrValidate<T> orThrowExceptionWith(UnaryOperator<String> exceptionMessageFunction) {
     this.exceptionFunction = ValidationException::new;
-    withExceptionMessage(messageFunction);
+    withExceptionMessage(exceptionMessageFunction);
     return this;
   }
 
@@ -72,7 +70,9 @@ final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfy
     this.optionalConsumer = Optional.of(consumer);
     return this;
   }
-
+  // TODO: naming
+  // IfNotValidThrowValidationException
+  // IfNotValidThrowCombinedValidationException
   @Override
   public T throwNotificationIfNotValid() {
     return this.validationLogic.throwNotificationIfNotValid(
@@ -83,6 +83,8 @@ final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfy
     );
   }
 
+  // IfNotValidThrowException
+  // IfNotValidThrowCombinedException
   @Override
   public T throwNotificationIfNotValid(Function<String, ? extends RuntimeException> exceptionFunction,
                                        BiFunction<T, String, String> exceptionMessageFunction) {
@@ -96,13 +98,15 @@ final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfy
     );
   }
 
+  // IfNotValidThrowCustomException
   @Override
   public T throwIfNotValid() {
     return this.validationLogic.throwIfNotValid(this.input, this.validationRules, this.optionalConsumer, failedRules -> true);
   }
 
+  // returnOptionalOrThrowCustomException
   @Override
-  public Optional<T> throwIfNotValidReturnOptional() {
+  public Optional<T> throwIfNotValidOrReturnOptional() {
     var validatedInput = throwIfNotValid();
     return isNull(validatedInput) ? empty() : Optional.of(validatedInput);
   }

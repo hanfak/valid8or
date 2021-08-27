@@ -35,8 +35,8 @@ final class ValidationLogic<T> {
   T throwNotificationIfNotValid(T input, ValidationRules<T> validationRules, Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer, Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
-      var exceptionMessage = getExceptionMessage(failedRules, input);
-      var validationException = createExceptionAndInput(new ValidationException(exceptionMessage), input);
+      var runtimeException = getExceptionMessage(failedRules, input);
+      var validationException = createExceptionAndInput(runtimeException, input);
       optionalConsumer.ifPresent(con -> con.accept(validationException));
       throw validationException.getException();
     }
@@ -52,8 +52,9 @@ final class ValidationLogic<T> {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
       var runtimeException = createCustomNotificationException(exceptionFunction, messageFunction, failedRules, input);
-      optionalConsumer.ifPresent(con -> con.accept(createExceptionAndInput(runtimeException, input)));
-      throw runtimeException;
+      var customException = createExceptionAndInput(runtimeException, input);
+      optionalConsumer.ifPresent(con -> con.accept(customException));
+      throw customException.getException();
     }
     return input;
   }
@@ -90,21 +91,21 @@ final class ValidationLogic<T> {
         .collect(toList());
   }
 
-  private String
+  private ValidationException
   getExceptionMessage(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules,
                       T input) {
     var allExceptionMessages = createAllExceptionMessages(failedRules, input);
-    return format("For input: '%s', the following problems occurred: '%s'", input, allExceptionMessages);
+    return new ValidationException(format("For input: '%s', the following problems occurred: '%s'", input, allExceptionMessages));
   }
 
   private String
   createAllExceptionMessages(List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules,
                              T input) {
     return failedRules.stream()
-        .map(ValidationRule::getMessage)
-        .map(messageFunction -> messageFunction.apply(input.toString()))
+        .map(ValidationRule::getExceptionMessageFunction)
+        .map(exceptionMessageFunction -> exceptionMessageFunction.apply(input.toString()))// ISSUES: if input does not have toString() Overridden it will return method ref in exception message
         .distinct()
-        .collect(joining(", ")); // TODO use different separator ie ;, or add as arg
+        .collect(joining("; "));
   }
 
   private ExceptionAndInput<RuntimeException, T> createExceptionAndInput(RuntimeException runtimeException, T input) {
@@ -136,7 +137,7 @@ final class ValidationLogic<T> {
   throwException(T input) {
     return predicateValidationRule -> {
       throw predicateValidationRule.getException()
-          .compose(predicateValidationRule.getMessage())
+          .compose(predicateValidationRule.getExceptionMessageFunction())
           .apply(nullSafeInput(input)); // ISSUES: if input does not have toString() Overridden it will return method ref in exception message
     };
   }
@@ -144,7 +145,7 @@ final class ValidationLogic<T> {
   private Set<String> createListOfAllExceptionMessages(
       List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules, T input) {
     return failedRules.stream()
-        .map(ValidationRule::getMessage)
+        .map(ValidationRule::getExceptionMessageFunction)
         .map(messageFunction -> messageFunction.apply(nullSafeInput(input)))
         .collect(toSet());
   }

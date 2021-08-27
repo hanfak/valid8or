@@ -28,7 +28,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThat(
           forInput(4)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid()
       ).isEqualTo(4);
@@ -61,7 +61,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThatThrownBy(() ->
           forInput(3)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .throwNotificationIfNotValid()
       )

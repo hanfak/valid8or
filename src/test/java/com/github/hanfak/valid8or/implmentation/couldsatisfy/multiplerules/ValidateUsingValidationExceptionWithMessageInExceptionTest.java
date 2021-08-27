@@ -42,18 +42,18 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
       assertThat(
           forInput(value)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .throwNotificationIfNotValid()
       ).isEqualTo(value);
 
       assertThat(
           forInput(value)
               .couldSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwNotificationIfNotValid()
       ).isEqualTo(value);
     }
@@ -72,7 +72,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .throwNotificationIfNotValid()
       )
-          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1, Is not greater than 2, for input: 1'")
+          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
           .isInstanceOf(ValidationException.class);
 
       assertThatThrownBy(() ->
@@ -83,7 +83,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .throwNotificationIfNotValid()
       )
-          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1, Is not even, for input: 1'")
+          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")
           .isInstanceOf(ValidationException.class);
     }
 
@@ -92,23 +92,23 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .throwNotificationIfNotValid()
       )
-          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1, Is not greater than 2, for input: 1'")
+          .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
           .isInstanceOf(ValidationException.class);
 
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isGreaterThan2)
-              .butWas(input -> "Is not greater than 2, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwNotificationIfNotValid()
       )
-          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1, Is not even, for input: 1'")
+          .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")
           .isInstanceOf(ValidationException.class);
     }
   }

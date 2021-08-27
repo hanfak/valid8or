@@ -20,7 +20,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
           forInput(4)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
-              .throwIfNotValidReturnOptional()
+              .throwIfNotValidOrReturnOptional()
       ).isEqualTo(Optional.of(4));
     }
 
@@ -29,8 +29,8 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
       assertThat(
           forInput(4)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
-              .throwIfNotValidReturnOptional()
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
+              .throwIfNotValidOrReturnOptional()
       ).isEqualTo(Optional.of(4));
     }
   }
@@ -44,7 +44,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
           forInput(3)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
-              .throwIfNotValidReturnOptional()
+              .throwIfNotValidOrReturnOptional()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(IllegalStateException.class);
@@ -55,8 +55,8 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
       assertThatThrownBy(() ->
           forInput(3)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
-              .throwIfNotValidReturnOptional()
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
+              .throwIfNotValidOrReturnOptional()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(ValidationException.class);

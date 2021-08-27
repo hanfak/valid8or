@@ -29,7 +29,7 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
       assertThat(
           forInput(4)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(4);
@@ -57,7 +57,7 @@ class ValidateUsingCustomValidationExceptionTest extends TestFixtures {
       assertThatThrownBy(() ->
           forInput(3)
               .couldSatisfy(isEven)
-              .butWas(input -> "Is not even, for input: " + input)
+              .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .throwNotificationIfNotValid(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )

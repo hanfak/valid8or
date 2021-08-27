@@ -6,5 +6,5 @@ import java.util.function.UnaryOperator;
 public interface MustThrowException<T> {
   MustMessage<T> orElseThrow(Function<String, ? extends RuntimeException> exceptionFunction);
 
-  MustConnectorOrValidate<T> butWas(UnaryOperator<String> messageFunction);
+  MustConnectorOrValidate<T> orThrowExceptionWith(UnaryOperator<String> exceptionMessageFunction);
 }
