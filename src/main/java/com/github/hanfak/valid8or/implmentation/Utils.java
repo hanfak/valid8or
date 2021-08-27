@@ -2,7 +2,7 @@ package com.github.hanfak.valid8or.implmentation;
 
 final class Utils {
 
-  public Utils() {
+  private Utils() {
     throw new IllegalStateException("No instances!");
   }
 
