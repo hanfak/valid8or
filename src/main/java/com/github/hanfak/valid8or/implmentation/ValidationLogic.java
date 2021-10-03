@@ -5,8 +5,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.*;
 
-import static com.github.hanfak.valid8or.implmentation.Utils.check;
-import static com.github.hanfak.valid8or.implmentation.ValidationRule.validationRule;
 import static java.lang.String.format;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
@@ -17,43 +15,29 @@ import static java.util.stream.Collectors.toSet;
 
 final class ValidationLogic<T> {
 
-  private static final String MISSING_MESSAGE_FUNCTION_EXCEPTION_MESSAGE = "Message function must be provided";
-  private static final String MISSING_EXCEPTION_FUNCTION_EXCEPTION_MESSAGE = "An exception function must be provided";
-  private static final String MISSING_RULE_EXCEPTION_MESSAGE = "Predicate rule must be provided";
-
-  void buildRule(UnaryOperator<String> messageFunction,
-                 Function<String, ? extends RuntimeException> exceptionFunction,
-                 Predicate<T> rulePredicate,
-                 ValidationRules<T> validationRules) {
-    check(isNull(rulePredicate), MISSING_RULE_EXCEPTION_MESSAGE);
-    check(isNull(exceptionFunction), MISSING_EXCEPTION_FUNCTION_EXCEPTION_MESSAGE);
-    check(isNull(messageFunction), MISSING_MESSAGE_FUNCTION_EXCEPTION_MESSAGE);
-
-    validationRules.add(validationRule(rulePredicate, exceptionFunction, messageFunction));
-  }
-
-  T throwNotificationIfNotValid(T input, ValidationRules<T> validationRules, Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer, Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
+  T throwNotificationIfNotValid(T input, ValidationRules<T> validationRules,
+                                Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
+                                Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
       var runtimeException = getExceptionMessage(failedRules, input);
       var validationException = createExceptionAndInput(runtimeException, input);
-      optionalConsumer.ifPresent(con -> con.accept(validationException));
+      optionalConsumer.ifPresent(consumer -> consumer.accept(validationException));
       throw validationException.getException();
     }
     return input;
   }
 
-  T throwNotificationIfNotValid(T input, ValidationRules<T> validationRules, Function<String, ? extends RuntimeException> exceptionFunction,
-                                BiFunction<T, String, String> messageFunction,
-                                Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer, Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
-    check(isNull(exceptionFunction), MISSING_EXCEPTION_FUNCTION_EXCEPTION_MESSAGE);
-    check(isNull(messageFunction), MISSING_MESSAGE_FUNCTION_EXCEPTION_MESSAGE);
-
+  T throwNotificationIfNotValid(T input, ValidationRules<T> validationRules,
+                                Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
+                                Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate,
+                                Function<String, ? extends RuntimeException> customExceptionFunction,
+                                BiFunction<T, String, String> customExceptionMessageFunction) {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
-      var runtimeException = createCustomNotificationException(exceptionFunction, messageFunction, failedRules, input);
+      var runtimeException = createCustomNotificationException(customExceptionFunction, customExceptionMessageFunction, failedRules, input);
       var customException = createExceptionAndInput(runtimeException, input);
-      optionalConsumer.ifPresent(con -> con.accept(customException));
+      optionalConsumer.ifPresent(consumer -> consumer.accept(customException));
       throw customException.getException();
     }
     return input;
@@ -64,16 +48,22 @@ final class ValidationLogic<T> {
                     Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
-      consumeThenThrow(failedRules, throwException(input), optionalConsumer, input);
+      var runtimeException = throwException(input).apply(failedRules.iterator().next());
+      optionalConsumer.ifPresent(consumer -> consumer.accept(createExceptionAndInput(runtimeException, input)));
+      throw runtimeException;
     }
     return input;
   }
 
-  Set<String> allExceptionMessages(T input, ValidationRules<T> validationRules,
-                                   Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
+  Set<String> allExceptionMessages(
+      T input, ValidationRules<T> validationRules,
+      Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
-      return createListOfAllExceptionMessages(failedRules, input);
+      return failedRules.stream()
+          .map(ValidationRule::getExceptionMessageFunction)
+          .map(exceptionMessageFunction -> exceptionMessageFunction.apply(nullSafeInput(input)))
+          .collect(toSet());
     }
     return emptySet();
   }
@@ -120,34 +110,13 @@ final class ValidationLogic<T> {
     return message.andThen(exceptionFunction).apply(input, allExceptionMessages);
   }
 
-  private void consumeThenThrow(
-      List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules,
-      Consumer<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> action,
-      Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
-      T input) {
-    try {
-      failedRules.stream().findFirst().ifPresent(action);
-    } catch (RuntimeException e) {
-      optionalConsumer.ifPresent(con -> con.accept(createExceptionAndInput(e, input)));
-      throw e;
-    }
-  }
-
-  private Consumer<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>
+  private Function<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>, ? extends RuntimeException>
   throwException(T input) {
     return predicateValidationRule -> {
-      throw predicateValidationRule.getException()
+      return predicateValidationRule.getException()
           .compose(predicateValidationRule.getExceptionMessageFunction())
           .apply(nullSafeInput(input)); // ISSUES: if input does not have toString() Overridden it will return method ref in exception message
     };
-  }
-
-  private Set<String> createListOfAllExceptionMessages(
-      List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules, T input) {
-    return failedRules.stream()
-        .map(ValidationRule::getExceptionMessageFunction)
-        .map(messageFunction -> messageFunction.apply(nullSafeInput(input)))
-        .collect(toSet());
   }
 
   String nullSafeInput(T input) {

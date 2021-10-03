@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.*;
 
-import static com.github.hanfak.valid8or.implmentation.Utils.check;
+import static com.github.hanfak.valid8or.implmentation.Utils.*;
 import static java.util.Objects.isNull;
 import static java.util.Optional.empty;
 import static java.util.function.Predicate.not;
@@ -13,14 +13,15 @@ import static java.util.function.Predicate.not;
 final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfyAllRulesBuilderFlow<T> {
 
   private T input;
-  private Predicate<T> predicate;
+  private Predicate<T> rulePredicate;
   private Function<String, ? extends RuntimeException> exceptionFunction;
   private Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer = empty();
 
+  private final Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>>
+      oneFailedValidationRule = not(List::isEmpty);
+
   private final ValidationRules<T> validationRules;
   private final ValidationLogic<T> validationLogic;
-  private final Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>>
-      thereExistsOneFailedRule = not(List::isEmpty);
 
   Valid8OrMustSatisfyAllRulesBuilder(ValidationRules<T> validationRules, ValidationLogic<T> validationLogic) {
     this.validationRules = validationRules;
@@ -34,14 +35,14 @@ final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfy
   }
 
   @Override
-  public MustThrowException<T> mustSatisfy(Predicate<T> predicateRule) {
-    this.predicate = predicateRule;
+  public MustThrowException<T> mustSatisfy(Predicate<T> rulePredicate) {
+    this.rulePredicate = rulePredicate;
     return this;
   }
 
   @Override
-  public MustThrowException<T> and(Predicate<T> predicateRule) {
-    mustSatisfy(predicateRule);
+  public MustThrowException<T> and(Predicate<T> rulePredicate) {
+    mustSatisfy(rulePredicate);
     return this;
   }
 
@@ -53,7 +54,11 @@ final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfy
 
   @Override
   public MustConnectorOrValidate<T> withExceptionMessage(UnaryOperator<String> exceptionMessageFunction) {
-    this.validationLogic.buildRule(exceptionMessageFunction, this.exceptionFunction, this.predicate, this.validationRules);
+    check(isNull(this.rulePredicate), MISSING_RULE_EXCEPTION_MESSAGE);
+    check(isNull(this.exceptionFunction), MISSING_EXCEPTION_FUNCTION);
+    check(isNull(exceptionMessageFunction), MISSING_EXCEPTION_MESSAGE_FUNCTION);
+
+    this.validationRules.add(exceptionMessageFunction, this.exceptionFunction, this.rulePredicate);
     return this;
   }
 
@@ -66,45 +71,55 @@ final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfy
 
   @Override
   public ConsumerTerminal<T> useConsumer(Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer) {
-    check(isNull(consumer), "A consumer must be provided");
+    check(isNull(consumer), MISSING_CONSUMER);
     this.optionalConsumer = Optional.of(consumer);
     return this;
   }
+
   // TODO: naming
   // IfNotValidThrowValidationException
   // IfNotValidThrowCombinedValidationException
+  // isValidOrThrowCombined
+  // validateCombined
   @Override
   public T throwNotificationIfNotValid() {
     return this.validationLogic.throwNotificationIfNotValid(
-        this.input,
-        this.validationRules,
-        this.optionalConsumer,
-        thereExistsOneFailedRule
+        this.input, this.validationRules, this.optionalConsumer,
+        oneFailedValidationRule
     );
   }
 
   // IfNotValidThrowException
   // IfNotValidThrowCombinedException
+  // isValidOrThrowCombined
+  // validateCombined
   @Override
-  public T throwNotificationIfNotValid(Function<String, ? extends RuntimeException> exceptionFunction,
-                                       BiFunction<T, String, String> exceptionMessageFunction) {
+  public T throwNotificationIfNotValid(Function<String, ? extends RuntimeException> customExceptionFunction,
+                                       BiFunction<T, String, String> customExceptionMessageFunction) {
+    check(isNull(customExceptionFunction), MISSING_EXCEPTION_FUNCTION);
+    check(isNull(customExceptionMessageFunction), MISSING_EXCEPTION_MESSAGE_FUNCTION);
+
     return this.validationLogic.throwNotificationIfNotValid(
-        this.input,
-        this.validationRules,
-        exceptionFunction,
-        exceptionMessageFunction,
-        this.optionalConsumer,
-        thereExistsOneFailedRule
+        this.input, this.validationRules, this.optionalConsumer,
+        oneFailedValidationRule,
+        customExceptionFunction,
+        customExceptionMessageFunction
     );
   }
 
   // IfNotValidThrowCustomException
+  // isValidOrThrow
+  // validate
   @Override
   public T throwIfNotValid() {
-    return this.validationLogic.throwIfNotValid(this.input, this.validationRules, this.optionalConsumer, failedRules -> true);
+    return this.validationLogic.throwIfNotValid(
+        this.input, this.validationRules, this.optionalConsumer,
+        oneFailedValidationRule);
   }
 
   // returnOptionalOrThrowCustomException
+  // isValidReturnOptionalOrThrow
+  // validateThenReturnOptional
   @Override
   public Optional<T> throwIfNotValidOrReturnOptional() {
     var validatedInput = throwIfNotValid();
@@ -113,13 +128,13 @@ final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfy
 
   @Override
   public Set<String> allExceptionMessages() {
-    return this.validationLogic.allExceptionMessages(this.input, this.validationRules, failedRules -> true);
+    return this.validationLogic.allExceptionMessages(this.input, this.validationRules, oneFailedValidationRule);
   }
 
   @SuppressWarnings("Convert2MethodRef")// For readability
   @Override
   public boolean isValid() {
-    return this.validationLogic.isValid(this.input, this.validationRules, failedRules -> failedRules.isEmpty());
+    return this.validationLogic.isValid(this.input, this.validationRules, not(oneFailedValidationRule));
   }
 
   @Override

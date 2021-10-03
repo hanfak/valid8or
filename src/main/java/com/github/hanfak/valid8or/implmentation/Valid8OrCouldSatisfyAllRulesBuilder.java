@@ -1,17 +1,19 @@
 package com.github.hanfak.valid8or.implmentation;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.*;
 
-import static com.github.hanfak.valid8or.implmentation.Utils.check;
+import static com.github.hanfak.valid8or.implmentation.Utils.*;
 import static java.util.Objects.isNull;
 import static java.util.Optional.empty;
+import static java.util.function.Predicate.not;
 
 final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8OrCouldSatisfyAllRulesBuilderFlow<T> {
 
   private T input;
-  private Predicate<T> predicate;
+  private Predicate<T> rulePredicate;
   private Function<String, ? extends RuntimeException> exceptionFunction;
   private Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer = empty();
 
@@ -30,14 +32,14 @@ final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8OrCouldSatis
   }
 
   @Override
-  public CouldThrowException<T> couldSatisfy(Predicate<T> predicateRule) {
-    this.predicate = predicateRule;
+  public CouldThrowException<T> couldSatisfy(Predicate<T> rulePredicate) {
+    this.rulePredicate = rulePredicate;
     return this;
   }
 
   @Override
-  public CouldThrowException<T> or(Predicate<T> predicateRule) {
-    couldSatisfy(predicateRule);
+  public CouldThrowException<T> or(Predicate<T> rulePredicate) {
+    couldSatisfy(rulePredicate);
     return this;
   }
 
@@ -49,7 +51,11 @@ final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8OrCouldSatis
 
   @Override
   public CouldConnectorOrValidate<T> withExceptionMessage(UnaryOperator<String> exceptionMessageFunction) {
-    this.validationLogic.buildRule(exceptionMessageFunction, this.exceptionFunction, this.predicate, this.validationRules);
+    check(isNull(this.rulePredicate), MISSING_RULE_EXCEPTION_MESSAGE);
+    check(isNull(this.exceptionFunction), MISSING_EXCEPTION_FUNCTION);
+    check(isNull(exceptionMessageFunction), MISSING_EXCEPTION_MESSAGE_FUNCTION);
+
+    this.validationRules.add(exceptionMessageFunction, this.exceptionFunction, this.rulePredicate);
     return this;
   }
 
@@ -62,7 +68,7 @@ final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8OrCouldSatis
 
   @Override
   public ConsumerTerminal<T> useConsumer(Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer) {
-    check(isNull(consumer), "A consumer must be provided");
+    check(isNull(consumer), MISSING_CONSUMER);
     this.optionalConsumer = Optional.of(consumer);
     return this;
   }
@@ -71,33 +77,28 @@ final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8OrCouldSatis
   @Override
   public T throwNotificationIfNotValid() {
     return this.validationLogic.throwNotificationIfNotValid(
-        this.input,
-        this.validationRules,
-        this.optionalConsumer,
-        failedRules -> failedRules.size() == this.validationRules.size()
-    );
+        this.input, this.validationRules, this.optionalConsumer,
+        allValidationRulesFailed());
   }
 
   @Override
-  public T throwNotificationIfNotValid(Function<String, ? extends RuntimeException> exceptionFunction,
-                                       BiFunction<T, String, String> exceptionMessageFunction) {
+  public T throwNotificationIfNotValid(Function<String, ? extends RuntimeException> customExceptionFunction,
+                                       BiFunction<T, String, String> customExceptionMessageFunction) {
+    check(isNull(customExceptionFunction), MISSING_EXCEPTION_FUNCTION);
+    check(isNull(customExceptionMessageFunction), MISSING_EXCEPTION_MESSAGE_FUNCTION);
+
     return this.validationLogic.throwNotificationIfNotValid(
-        this.input,
-        this.validationRules,
-        exceptionFunction,
-        exceptionMessageFunction,
-        this.optionalConsumer,
-        failedRules -> failedRules.size() == this.validationRules.size()
-    );
+        this.input, this.validationRules, this.optionalConsumer,
+        allValidationRulesFailed(),
+        customExceptionFunction,
+        customExceptionMessageFunction);
   }
 
   @Override
   public T throwIfNotValid() {
     return this.validationLogic.throwIfNotValid(
-        this.input,
-        this.validationRules,
-        this.optionalConsumer,
-        failedRules -> failedRules.size() == validationRules.size());
+        this.input, this.validationRules, this.optionalConsumer,
+        allValidationRulesFailed());
   }
 
   @Override
@@ -108,21 +109,21 @@ final class Valid8OrCouldSatisfyAllRulesBuilder<T> implements Valid8OrCouldSatis
 
   @Override
   public Set<String> allExceptionMessages() {
-    return this.validationLogic.allExceptionMessages(
-        this.input,
-        this.validationRules,
-        failedRules -> failedRules.size() == this.validationRules.size());
+    return this.validationLogic.allExceptionMessages(this.input, this.validationRules, allValidationRulesFailed());
   }
 
   @Override
   public boolean isValid() {
-    return this.validationLogic.isValid(
-        this.input, this.validationRules, failedRules -> failedRules.size() != this.validationRules.size()
-    );
+    return this.validationLogic.isValid(this.input, this.validationRules, not(allValidationRulesFailed()));
   }
 
   @Override
   public boolean isNotValid() {
     return !isValid();
+  }
+
+  private Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>>
+  allValidationRulesFailed() {
+    return failedRules -> failedRules.size() == this.validationRules.size();
   }
 }
