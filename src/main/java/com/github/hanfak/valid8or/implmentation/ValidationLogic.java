@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.*;
 
+import static com.github.hanfak.valid8or.implmentation.ExceptionAndInput.exceptionAndInput;
 import static java.lang.String.format;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
@@ -99,7 +100,7 @@ final class ValidationLogic<T> {
   }
 
   private ExceptionAndInput<RuntimeException, T> createExceptionAndInput(RuntimeException runtimeException, T input) {
-    return new ExceptionAndInput<>(runtimeException, runtimeException.getMessage(), input);
+    return exceptionAndInput(runtimeException, runtimeException.getMessage(), input);
   }
 
   private RuntimeException createCustomNotificationException(

@@ -89,11 +89,6 @@ final class Valid8orMustSatisfyAllRulesBuilder<T> implements Valid8orMustSatisfy
     return isNull(validatedInput) ? empty() : Optional.of(validatedInput);
   }
 
-  // TODO: naming
-  // IfNotValidThrowValidationException
-  // IfNotValidThrowCombinedValidationException
-  // isValidOrThrowCombined
-  // validateCombined
   @Override
   public T isValidOrThrowCombined() {
     return this.validationLogic.isValidOrThrowCombined(
@@ -121,7 +116,6 @@ final class Valid8orMustSatisfyAllRulesBuilder<T> implements Valid8orMustSatisfy
     return this.validationLogic.allExceptionMessages(this.input, this.validationRules, oneFailedValidationRule);
   }
 
-  @SuppressWarnings("Convert2MethodRef")// For readability
   @Override
   public boolean isValid() {
     return this.validationLogic.isValid(this.input, this.validationRules, not(oneFailedValidationRule));

@@ -1,7 +1,8 @@
 package com.github.hanfak.valid8or.helper;
 
-import lombok.Value;
 import org.junit.jupiter.api.Test;
+
+import java.util.Objects;
 
 import static com.github.hanfak.valid8or.helper.PredicateObjectRules.isEqualsTo;
 import static com.github.hanfak.valid8or.helper.PredicateObjectRules.isNotNull;
@@ -29,12 +30,32 @@ class PredicateObjectRulesTest {
   }
 }
 
-@Value
 class TestObject {
-  String field;
+
+  private final String field;
+
+  TestObject(String field) {
+    this.field = field;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    TestObject that = (TestObject) o;
+
+    return Objects.equals(field, that.field);
+  }
+
+  @Override
+  public int hashCode() {
+    return field != null ? field.hashCode() : 0;
+  }
 }
 
 class TestObject1 {
+
   private final String field;
 
   public TestObject1(String field) {
