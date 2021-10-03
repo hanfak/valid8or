@@ -18,7 +18,7 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
               .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValid()
+              .isValidOrThrow()
       ).isEqualTo(4);
     }
 
@@ -29,7 +29,7 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
               .mustSatisfy(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValid()
+              .isValidOrThrow()
       ).isEqualTo(4);
     }
   }
@@ -44,7 +44,7 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
               .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValid()
+              .isValidOrThrow()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(IllegalStateException.class);
@@ -62,7 +62,7 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
               .mustSatisfy(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValid()
+              .isValidOrThrow()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(ValidationException.class);

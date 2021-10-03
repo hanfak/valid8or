@@ -14,7 +14,7 @@ class Valid8OrCouldSatisfyHandlingNullInputTest extends TestFixtures {
         forInput(4)
             .couldSatisfy(isEven)
             .orThrowExceptionWith(input -> "not legal")
-            .throwIfNotValidOrReturnOptional())
+            .isValidReturnOptionalOrThrow())
         .isPresent().containsInstanceOf(Integer.class).contains(4);
   }
 
@@ -24,7 +24,7 @@ class Valid8OrCouldSatisfyHandlingNullInputTest extends TestFixtures {
         forInput(null)
             .couldSatisfy(input -> true)
             .orThrowExceptionWith(input -> "not legal")
-            .throwIfNotValidOrReturnOptional())
+            .isValidReturnOptionalOrThrow())
         .isEmpty();
   }
 
@@ -34,7 +34,7 @@ class Valid8OrCouldSatisfyHandlingNullInputTest extends TestFixtures {
         forInput(null)
             .couldSatisfy(input -> false)
             .orThrowExceptionWith(input -> "not legal")
-            .throwIfNotValidOrReturnOptional())
+            .isValidReturnOptionalOrThrow())
         .isInstanceOf(ValidationException.class).hasMessage("not legal");
   }
 
@@ -45,7 +45,7 @@ class Valid8OrCouldSatisfyHandlingNullInputTest extends TestFixtures {
             .couldSatisfy(input -> false)
             .orElseThrow(IllegalStateException::new)
             .withExceptionMessage(input -> "not legal")
-            .throwIfNotValidOrReturnOptional())
+            .isValidReturnOptionalOrThrow())
         .isInstanceOf(IllegalStateException.class).hasMessage("not legal");
   }
 
@@ -55,7 +55,7 @@ class Valid8OrCouldSatisfyHandlingNullInputTest extends TestFixtures {
         forInput(null)
             .couldSatisfy(input -> false)
             .orThrowExceptionWith(input -> "not legal")
-            .throwIfNotValid())
+            .isValidOrThrow())
         .isInstanceOf(ValidationException.class).hasMessage("not legal");
   }
 
@@ -66,7 +66,7 @@ class Valid8OrCouldSatisfyHandlingNullInputTest extends TestFixtures {
             .couldSatisfy(input -> false)
             .orElseThrow(IllegalStateException::new)
             .withExceptionMessage(input -> "not legal")
-            .throwIfNotValid())
+            .isValidOrThrow())
         .isInstanceOf(IllegalStateException.class).hasMessage("not legal");
   }
 

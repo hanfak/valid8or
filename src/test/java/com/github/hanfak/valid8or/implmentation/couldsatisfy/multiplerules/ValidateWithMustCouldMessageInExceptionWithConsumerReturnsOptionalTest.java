@@ -27,7 +27,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       ).isEqualTo(Optional.of(value));
 
       assertThat(
@@ -37,7 +37,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .or(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       ).isEqualTo(Optional.of(value));
     }
 
@@ -51,7 +51,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .or(isGreaterThan2)
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       ).isEqualTo(Optional.of(value));
 
       assertThat(
@@ -61,7 +61,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .or(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       ).isEqualTo(Optional.of(value));
     }
   }
@@ -78,7 +78,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       )
           .hasMessage("Is not even, for input: 1")
           .isInstanceOf(IllegalStateException.class);
@@ -96,7 +96,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .or(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       )
           .hasMessage("Is not greater than 2, for input: 1")
           .isInstanceOf(IllegalArgumentException.class);
@@ -116,7 +116,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .or(isGreaterThan2)
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValid()
+              .isValidReturnOptionalOrThrow()
       )
           .hasMessage("Is not even, for input: 1")
           .isInstanceOf(ValidationException.class);
@@ -133,7 +133,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .or(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValid()
+              .isValidReturnOptionalOrThrow()
       )
           .hasMessage("Is not greater than 2, for input: 1")
           .isInstanceOf(ValidationException.class);

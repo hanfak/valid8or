@@ -19,7 +19,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       ).isPresent().containsInstanceOf(Integer.class).contains(4);
     }
 
@@ -30,7 +30,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .mustSatisfy(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       ).isPresent().containsInstanceOf(Integer.class).contains(4);
     }
   }
@@ -45,7 +45,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(IllegalStateException.class);
@@ -63,7 +63,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
               .mustSatisfy(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwIfNotValid()
+              .isValidOrThrow()
       )
           .hasMessage("Is not even, for input: 3")
           .isInstanceOf(ValidationException.class);

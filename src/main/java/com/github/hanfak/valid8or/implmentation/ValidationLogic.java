@@ -15,6 +15,18 @@ import static java.util.stream.Collectors.toSet;
 
 final class ValidationLogic<T> {
 
+  T isValidOrThrow(T input, ValidationRules<T> validationRules,
+                   Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
+                   Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
+    var failedRules = findFailedRules(validationRules, input);
+    if (failedRulesPredicate.test(failedRules)) {
+      var runtimeException = throwException(input).apply(failedRules.iterator().next());
+      optionalConsumer.ifPresent(consumer -> consumer.accept(createExceptionAndInput(runtimeException, input)));
+      throw runtimeException;
+    }
+    return input;
+  }
+
   T throwNotificationIfNotValid(T input, ValidationRules<T> validationRules,
                                 Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
                                 Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
@@ -39,18 +51,6 @@ final class ValidationLogic<T> {
       var customException = createExceptionAndInput(runtimeException, input);
       optionalConsumer.ifPresent(consumer -> consumer.accept(customException));
       throw customException.getException();
-    }
-    return input;
-  }
-
-  T throwIfNotValid(T input, ValidationRules<T> validationRules,
-                    Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
-                    Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
-    var failedRules = findFailedRules(validationRules, input);
-    if (failedRulesPredicate.test(failedRules)) {
-      var runtimeException = throwException(input).apply(failedRules.iterator().next());
-      optionalConsumer.ifPresent(consumer -> consumer.accept(createExceptionAndInput(runtimeException, input)));
-      throw runtimeException;
     }
     return input;
   }
@@ -119,7 +119,7 @@ final class ValidationLogic<T> {
     };
   }
 
-  String nullSafeInput(T input) {
+  private String nullSafeInput(T input) {
     return isNull(input) ? null : input.toString();
   }
 }

@@ -25,7 +25,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       ).isEqualTo(Optional.of(4));
 
       assertThat(
@@ -34,7 +34,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .or(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       ).isEqualTo(Optional.of(4));
     }
 
@@ -47,7 +47,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2)
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       ).isEqualTo(Optional.of(4));
 
       assertThat(
@@ -56,7 +56,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       ).isEqualTo(Optional.of(4));
     }
   }
@@ -72,7 +72,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       )
           .hasMessage("Is not even, for input: 1")
           .isInstanceOf(IllegalStateException.class);
@@ -83,7 +83,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .or(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       )
           .hasMessage("Is not greater than 2, for input: 1")
           .isInstanceOf(IllegalArgumentException.class);
@@ -97,7 +97,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2)
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       )
           .hasMessage("Is not even, for input: 1")
           .isInstanceOf(ValidationException.class);
@@ -108,7 +108,7 @@ class ValidateWithMustCouldMessageInExceptionReturnsOptionalTest extends TestFix
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
-              .throwIfNotValidOrReturnOptional()
+              .isValidReturnOptionalOrThrow()
       )
           .hasMessage("Is not greater than 2, for input: 1")
           .isInstanceOf(ValidationException.class);

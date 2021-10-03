@@ -6,9 +6,8 @@ public final class Valid8orMustSatisfyAllRules {
   }
 
   public static <T> MustSatisfy<T> forInput(T input) {
-    return new Valid8OrMustSatisfyAllRulesBuilder<>(
-        new ValidationRules<T>(),
-        new ValidationLogic<>())
-        .forInput(input);
+    var valid8orMustSatisfyAllRulesBuilder = new Valid8OrMustSatisfyAllRulesBuilder<>(
+        new ValidationRules<T>(), new ValidationLogic<>());
+    return valid8orMustSatisfyAllRulesBuilder.forInput(input);
   }
 }

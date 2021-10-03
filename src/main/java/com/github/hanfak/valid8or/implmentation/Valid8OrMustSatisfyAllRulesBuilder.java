@@ -76,6 +76,19 @@ final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfy
     return this;
   }
 
+  @Override
+  public T isValidOrThrow() {
+    return this.validationLogic.isValidOrThrow(
+        this.input, this.validationRules, this.optionalConsumer,
+        oneFailedValidationRule);
+  }
+
+  @Override
+  public Optional<T> isValidReturnOptionalOrThrow() {
+    var validatedInput = isValidOrThrow();
+    return isNull(validatedInput) ? empty() : Optional.of(validatedInput);
+  }
+
   // TODO: naming
   // IfNotValidThrowValidationException
   // IfNotValidThrowCombinedValidationException
@@ -105,25 +118,6 @@ final class Valid8OrMustSatisfyAllRulesBuilder<T> implements Valid8OrMustSatisfy
         customExceptionFunction,
         customExceptionMessageFunction
     );
-  }
-
-  // IfNotValidThrowCustomException
-  // isValidOrThrow
-  // validate
-  @Override
-  public T throwIfNotValid() {
-    return this.validationLogic.throwIfNotValid(
-        this.input, this.validationRules, this.optionalConsumer,
-        oneFailedValidationRule);
-  }
-
-  // returnOptionalOrThrowCustomException
-  // isValidReturnOptionalOrThrow
-  // validateThenReturnOptional
-  @Override
-  public Optional<T> throwIfNotValidOrReturnOptional() {
-    var validatedInput = throwIfNotValid();
-    return isNull(validatedInput) ? empty() : Optional.of(validatedInput);
   }
 
   @Override
