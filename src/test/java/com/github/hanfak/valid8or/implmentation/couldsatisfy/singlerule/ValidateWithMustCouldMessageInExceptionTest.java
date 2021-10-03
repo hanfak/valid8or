@@ -18,7 +18,7 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
       assertThat(
           forInput(4)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .isValidOrThrow()
       ).isEqualTo(4);
     }
@@ -43,7 +43,7 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
       assertThatThrownBy(() ->
           forInput(3)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .isValidOrThrow()
       )
           .hasMessage("Is not even, for input: 3")

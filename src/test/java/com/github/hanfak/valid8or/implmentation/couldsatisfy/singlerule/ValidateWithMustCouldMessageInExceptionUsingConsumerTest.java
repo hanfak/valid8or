@@ -17,7 +17,7 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
       assertThat(
           forInput(4)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidOrThrow()
       ).isEqualTo(4);
@@ -43,7 +43,7 @@ class ValidateWithMustCouldMessageInExceptionUsingConsumerTest extends TestFixtu
       assertThatThrownBy(() ->
           forInput(3)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidOrThrow()
       )

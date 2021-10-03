@@ -18,7 +18,7 @@ public class ValidateUsingCustomValidationExceptionUsingConsumerTest extends Tes
       assertThat(
           forInput(4)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidOrThrowCombined(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
@@ -46,7 +46,7 @@ public class ValidateUsingCustomValidationExceptionUsingConsumerTest extends Tes
       assertThatThrownBy(() ->
           forInput(3)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidOrThrowCombined(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))

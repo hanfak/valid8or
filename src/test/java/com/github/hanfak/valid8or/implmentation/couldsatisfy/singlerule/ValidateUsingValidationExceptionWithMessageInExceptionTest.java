@@ -17,7 +17,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
       assertThat(
           forInput(4)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .isValidOrThrowCombined()
       ).isEqualTo(4);
     }
@@ -41,7 +41,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
       assertThatThrownBy(() ->
           forInput(3)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .isValidOrThrowCombined()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")

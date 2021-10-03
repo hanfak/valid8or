@@ -50,7 +50,7 @@ final class Valid8orCouldSatisfyAllRulesBuilder<T> implements Valid8orCouldSatis
   }
 
   @Override
-  public CouldConnectorOrValidate<T> withExceptionMessage(UnaryOperator<String> exceptionMessageFunction) {
+  public CouldConnectorOrValidate<T> withMessage(UnaryOperator<String> exceptionMessageFunction) {
     check(isNull(this.rulePredicate), MISSING_RULE_EXCEPTION_MESSAGE);
     check(isNull(this.exceptionFunction), MISSING_EXCEPTION_FUNCTION);
     check(isNull(exceptionMessageFunction), MISSING_EXCEPTION_MESSAGE_FUNCTION);
@@ -62,7 +62,7 @@ final class Valid8orCouldSatisfyAllRulesBuilder<T> implements Valid8orCouldSatis
   @Override
   public CouldConnectorOrValidate<T> orThrowExceptionWith(UnaryOperator<String> exceptionMessageFunction) {
     this.exceptionFunction = ValidationException::new;
-    withExceptionMessage(exceptionMessageFunction);
+    withMessage(exceptionMessageFunction);
     return this;
   }
 

@@ -12,7 +12,7 @@ class CheckIsValidWithMustCouldMessageInExceptionTest extends TestFixtures {
     assertThat(
         forInput(4)
             .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .withMessage(input -> "Is not even, for input: " + input)
             .isValid()
     ).isTrue();
 
@@ -20,7 +20,7 @@ class CheckIsValidWithMustCouldMessageInExceptionTest extends TestFixtures {
     assertThat(
         forInput(3)
             .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .withMessage(input -> "Is not even, for input: " + input)
             .isValid()
     ).isFalse();
   }

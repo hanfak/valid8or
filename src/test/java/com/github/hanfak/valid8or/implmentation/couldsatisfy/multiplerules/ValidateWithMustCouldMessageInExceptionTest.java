@@ -20,18 +20,18 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
       assertThat(
           forInput(value)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .isValidOrThrow()
       ).isEqualTo(value);
 
       assertThat(
           forInput(value)
               .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .or(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .isValidOrThrow()
       ).isEqualTo(value);
     }
@@ -67,9 +67,9 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .isValidOrThrow()
       )
           .hasMessage("Is not even, for input: 1")
@@ -78,9 +78,9 @@ class ValidateWithMustCouldMessageInExceptionTest extends TestFixtures {
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .or(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .isValidOrThrow()
       )
           .hasMessage("Is not greater than 2, for input: 1")

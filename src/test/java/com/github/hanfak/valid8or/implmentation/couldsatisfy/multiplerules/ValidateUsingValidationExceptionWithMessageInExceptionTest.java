@@ -20,18 +20,18 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
       assertThat(
           forInput(value)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .isValidOrThrowCombined()
       ).isEqualTo(value);
 
       assertThat(
           forInput(value)
               .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .or(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .isValidOrThrowCombined()
       ).isEqualTo(value);
     }
@@ -67,9 +67,9 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .isValidOrThrowCombined()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
@@ -78,9 +78,9 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .or(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .isValidOrThrowCombined()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")

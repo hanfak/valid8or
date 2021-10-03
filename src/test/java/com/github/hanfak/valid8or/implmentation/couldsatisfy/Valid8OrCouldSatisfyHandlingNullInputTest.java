@@ -44,7 +44,7 @@ class Valid8OrCouldSatisfyHandlingNullInputTest extends TestFixtures {
         forInput(null)
             .couldSatisfy(input -> false)
             .orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "not legal")
+            .withMessage(input -> "not legal")
             .isValidReturnOptionalOrThrow())
         .isInstanceOf(IllegalStateException.class).hasMessage("not legal");
   }
@@ -65,7 +65,7 @@ class Valid8OrCouldSatisfyHandlingNullInputTest extends TestFixtures {
         forInput(null)
             .couldSatisfy(input -> false)
             .orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "not legal")
+            .withMessage(input -> "not legal")
             .isValidOrThrow())
         .isInstanceOf(IllegalStateException.class).hasMessage("not legal");
   }
@@ -75,7 +75,7 @@ class Valid8OrCouldSatisfyHandlingNullInputTest extends TestFixtures {
     assertThat(
         forInput(null)
             .couldSatisfy(x -> false).orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .withMessage(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
     ).containsOnly("Is not even, for input: null");
 

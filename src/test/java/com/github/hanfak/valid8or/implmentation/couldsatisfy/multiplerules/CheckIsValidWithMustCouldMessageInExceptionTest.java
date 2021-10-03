@@ -14,34 +14,34 @@ class CheckIsValidWithMustCouldMessageInExceptionTest extends TestFixtures {
     assertThat(
         forInput(value)
             .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .withMessage(input -> "Is not even, for input: " + input)
             .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-            .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+            .withMessage(input -> "Is not greater than 2, for input: " + input)
             .isValid()
     ).isTrue();
     assertThat(
         forInput(value)
             .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-            .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+            .withMessage(input -> "Is not greater than 2, for input: " + input)
             .or(isEven).orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .withMessage(input -> "Is not even, for input: " + input)
             .isValid()
     ).isTrue();
 
     assertThat(
         forInput(1)
             .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .withMessage(input -> "Is not even, for input: " + input)
             .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-            .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+            .withMessage(input -> "Is not greater than 2, for input: " + input)
             .isValid()
     ).isFalse();
     assertThat(
         forInput(1)
             .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-            .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+            .withMessage(input -> "Is not greater than 2, for input: " + input)
             .or(isEven).orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .withMessage(input -> "Is not even, for input: " + input)
             .isValid()
     ).isFalse();
   }

@@ -12,14 +12,14 @@ class AllExceptionMessagesReturnedAfterValidatingWithMustCouldMessageInException
     assertThat(
         forInput(4)
             .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .withMessage(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
     ).isEmpty();
 
     assertThat(
         forInput(3)
             .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-            .withExceptionMessage(input -> "Is not even, for input: " + input)
+            .withMessage(input -> "Is not even, for input: " + input)
             .allExceptionMessages()
     ).containsOnly("Is not even, for input: 3");
   }

@@ -19,7 +19,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
       assertThat(
           forInput(4)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidReturnOptionalOrThrow()
       ).isEqualTo(Optional.of(4));
@@ -45,7 +45,7 @@ class ValidateWithMustCouldMessageInExceptionWithConsumerReturnsOptionalTest ext
       assertThatThrownBy(() ->
           forInput(3)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidReturnOptionalOrThrow()
       )

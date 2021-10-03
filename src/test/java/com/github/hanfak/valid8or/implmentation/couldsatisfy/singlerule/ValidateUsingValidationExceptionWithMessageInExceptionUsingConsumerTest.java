@@ -17,7 +17,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThat(
           forInput(4)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidOrThrowCombined()
       ).isEqualTo(4);
@@ -43,7 +43,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThatThrownBy(() ->
           forInput(3)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidOrThrowCombined()
       )

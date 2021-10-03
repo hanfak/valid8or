@@ -20,9 +20,9 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThat(
           forInput(value)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidOrThrowCombined()
       ).isEqualTo(value);
@@ -30,9 +30,9 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThat(
           forInput(value)
               .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .or(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidOrThrowCombined()
       ).isEqualTo(value);
@@ -70,9 +70,9 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidOrThrowCombined()
       )
@@ -87,9 +87,9 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
       assertThatThrownBy(() ->
           forInput(1)
               .couldSatisfy(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
-              .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
+              .withMessage(input -> "Is not greater than 2, for input: " + input)
               .or(isEven).orElseThrow(IllegalStateException::new)
-              .withExceptionMessage(input -> "Is not even, for input: " + input)
+              .withMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
               .isValidOrThrowCombined()
       )
