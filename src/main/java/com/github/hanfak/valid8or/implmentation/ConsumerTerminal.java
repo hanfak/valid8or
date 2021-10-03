@@ -9,8 +9,8 @@ public interface ConsumerTerminal<T> {
 
   Optional<T> isValidReturnOptionalOrThrow();
 
-  T throwNotificationIfNotValid();
+  T isValidOrThrowCombined();
 
-  T throwNotificationIfNotValid(Function<String, ? extends RuntimeException> exceptionFunction,
-                                BiFunction<T, String, String> exceptionMessageFunction);
+  T isValidOrThrowCombined(Function<String, ? extends RuntimeException> exceptionFunction,
+                           BiFunction<T, String, String> exceptionMessageFunction);
 }

@@ -20,7 +20,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       ).isEqualTo(4);
 
       assertThat(
@@ -29,7 +29,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .and(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       ).isEqualTo(4);
     }
 
@@ -41,7 +41,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2)
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       ).isEqualTo(4);
 
       assertThat(
@@ -50,7 +50,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .and(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       ).isEqualTo(4);
     }
   }
@@ -66,7 +66,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -76,7 +76,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '2', the following problems occurred: 'Is not greater than 2, for input: 2'")
           .isInstanceOf(ValidationException.class);
@@ -86,7 +86,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
           .isInstanceOf(ValidationException.class);
@@ -97,7 +97,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .and(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -107,7 +107,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .and(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '2', the following problems occurred: 'Is not greater than 2, for input: 2'")
           .isInstanceOf(ValidationException.class);
@@ -117,7 +117,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .and(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")
           .isInstanceOf(ValidationException.class);
@@ -131,7 +131,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2)
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -141,7 +141,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2)
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '2', the following problems occurred: 'Is not greater than 2, for input: 2'")
           .isInstanceOf(ValidationException.class);
@@ -151,7 +151,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .and(isGreaterThan2)
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
           .isInstanceOf(ValidationException.class);
@@ -162,7 +162,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .and(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -172,7 +172,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .and(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '2', the following problems occurred: 'Is not greater than 2, for input: 2'")
           .isInstanceOf(ValidationException.class);
@@ -182,7 +182,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .and(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")
           .isInstanceOf(ValidationException.class);

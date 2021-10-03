@@ -24,7 +24,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       ).isEqualTo(value);
 
       assertThat(
@@ -34,7 +34,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
               .or(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       ).isEqualTo(value);
     }
 
@@ -48,7 +48,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
               .or(isGreaterThan2)
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       ).isEqualTo(value);
 
       assertThat(
@@ -57,7 +57,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .or(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       ).isEqualTo(value);
     }
   }
@@ -74,7 +74,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
               .or(isGreaterThan2).orElseThrow(IllegalArgumentException::new)
               .withExceptionMessage(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
           .isInstanceOf(ValidationException.class);
@@ -91,7 +91,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
               .or(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")
           .isInstanceOf(ValidationException.class);
@@ -111,7 +111,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
               .or(isGreaterThan2)
               .orThrowExceptionWith(input -> "Is not greater than 2, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not even, for input: 1; Is not greater than 2, for input: 1'")
           .isInstanceOf(ValidationException.class);
@@ -128,7 +128,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionUsingConsumerTest ex
               .or(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '1', the following problems occurred: 'Is not greater than 2, for input: 1; Is not even, for input: 1'")
           .isInstanceOf(ValidationException.class);

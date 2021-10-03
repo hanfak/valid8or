@@ -20,7 +20,7 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
               .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid(CustomException::new,
+              .isValidOrThrowCombined(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(4);
     }
@@ -32,7 +32,7 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
               .mustSatisfy(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid(CustomException::new,
+              .isValidOrThrowCombined(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       ).isEqualTo(4);
     }
@@ -48,7 +48,7 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
               .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid(CustomException::new,
+              .isValidOrThrowCombined(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 3, with messages: 'Is not even, for input: 3'")
@@ -67,7 +67,7 @@ class ValidateUsingCustomValidationExceptionUsingConsumerTest extends TestFixtur
               .mustSatisfy(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
               .useConsumer(stubLogger::log)
-              .throwNotificationIfNotValid(CustomException::new,
+              .isValidOrThrowCombined(CustomException::new,
                   (input, errors) -> format("All problems are, for input: %s, with messages: '%s'", input, errors))
       )
           .hasMessage("All problems are, for input: 3, with messages: 'Is not even, for input: 3'")

@@ -18,7 +18,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
           forInput(4)
               .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       ).isEqualTo(4);
     }
 
@@ -28,7 +28,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
           forInput(4)
               .mustSatisfy(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       ).isEqualTo(4);
     }
   }
@@ -42,7 +42,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
           forInput(3)
               .mustSatisfy(isEven).orElseThrow(IllegalStateException::new)
               .withExceptionMessage(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);
@@ -54,7 +54,7 @@ class ValidateUsingValidationExceptionWithMessageInExceptionTest extends TestFix
           forInput(3)
               .mustSatisfy(isEven)
               .orThrowExceptionWith(input -> "Is not even, for input: " + input)
-              .throwNotificationIfNotValid()
+              .isValidOrThrowCombined()
       )
           .hasMessage("For input: '3', the following problems occurred: 'Is not even, for input: 3'")
           .isInstanceOf(ValidationException.class);

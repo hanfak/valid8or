@@ -95,24 +95,20 @@ final class Valid8orMustSatisfyAllRulesBuilder<T> implements Valid8orMustSatisfy
   // isValidOrThrowCombined
   // validateCombined
   @Override
-  public T throwNotificationIfNotValid() {
-    return this.validationLogic.throwNotificationIfNotValid(
+  public T isValidOrThrowCombined() {
+    return this.validationLogic.isValidOrThrowCombined(
         this.input, this.validationRules, this.optionalConsumer,
         oneFailedValidationRule
     );
   }
 
-  // IfNotValidThrowException
-  // IfNotValidThrowCombinedException
-  // isValidOrThrowCombined
-  // validateCombined
   @Override
-  public T throwNotificationIfNotValid(Function<String, ? extends RuntimeException> customExceptionFunction,
-                                       BiFunction<T, String, String> customExceptionMessageFunction) {
+  public T isValidOrThrowCombined(Function<String, ? extends RuntimeException> customExceptionFunction,
+                                  BiFunction<T, String, String> customExceptionMessageFunction) {
     check(isNull(customExceptionFunction), MISSING_EXCEPTION_FUNCTION);
     check(isNull(customExceptionMessageFunction), MISSING_EXCEPTION_MESSAGE_FUNCTION);
 
-    return this.validationLogic.throwNotificationIfNotValid(
+    return this.validationLogic.isValidOrThrowCombined(
         this.input, this.validationRules, this.optionalConsumer,
         oneFailedValidationRule,
         customExceptionFunction,

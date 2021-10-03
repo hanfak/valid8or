@@ -27,9 +27,9 @@ final class ValidationLogic<T> {
     return input;
   }
 
-  T throwNotificationIfNotValid(T input, ValidationRules<T> validationRules,
-                                Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
-                                Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
+  T isValidOrThrowCombined(T input, ValidationRules<T> validationRules,
+                           Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
+                           Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
       var runtimeException = getExceptionMessage(failedRules, input);
@@ -40,11 +40,11 @@ final class ValidationLogic<T> {
     return input;
   }
 
-  T throwNotificationIfNotValid(T input, ValidationRules<T> validationRules,
-                                Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
-                                Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate,
-                                Function<String, ? extends RuntimeException> customExceptionFunction,
-                                BiFunction<T, String, String> customExceptionMessageFunction) {
+  T isValidOrThrowCombined(T input, ValidationRules<T> validationRules,
+                           Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer,
+                           Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate,
+                           Function<String, ? extends RuntimeException> customExceptionFunction,
+                           BiFunction<T, String, String> customExceptionMessageFunction) {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
       var runtimeException = createCustomNotificationException(customExceptionFunction, customExceptionMessageFunction, failedRules, input);

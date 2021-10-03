@@ -86,21 +86,20 @@ final class Valid8orCouldSatisfyAllRulesBuilder<T> implements Valid8orCouldSatis
     return isNull(validatedInput) ? empty() : Optional.of(validatedInput);
   }
 
-  // TODO: naming
   @Override
-  public T throwNotificationIfNotValid() {
-    return this.validationLogic.throwNotificationIfNotValid(
+  public T isValidOrThrowCombined() {
+    return this.validationLogic.isValidOrThrowCombined(
         this.input, this.validationRules, this.optionalConsumer,
         allValidationRulesFailed());
   }
 
   @Override
-  public T throwNotificationIfNotValid(Function<String, ? extends RuntimeException> customExceptionFunction,
-                                       BiFunction<T, String, String> customExceptionMessageFunction) {
+  public T isValidOrThrowCombined(Function<String, ? extends RuntimeException> customExceptionFunction,
+                                  BiFunction<T, String, String> customExceptionMessageFunction) {
     check(isNull(customExceptionFunction), MISSING_EXCEPTION_FUNCTION);
     check(isNull(customExceptionMessageFunction), MISSING_EXCEPTION_MESSAGE_FUNCTION);
 
-    return this.validationLogic.throwNotificationIfNotValid(
+    return this.validationLogic.isValidOrThrowCombined(
         this.input, this.validationRules, this.optionalConsumer,
         allValidationRulesFailed(),
         customExceptionFunction,
