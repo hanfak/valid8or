@@ -34,26 +34,17 @@ public final class ExceptionAndInput<E, T> {
     if (o == this) return true;
     if (!(o instanceof ExceptionAndInput)) return false;
     final ExceptionAndInput<?, ?> other = (ExceptionAndInput<?, ?>) o;
-    final Object this$exception = this.getException();
-    final Object other$exception = other.getException();
-    if (!Objects.equals(this$exception, other$exception)) return false;
-    final Object this$message = this.getMessage();
-    final Object other$message = other.getMessage();
-    if (!Objects.equals(this$message, other$message)) return false;
-    final Object this$input = this.getInput();
-    final Object other$input = other.getInput();
-    return Objects.equals(this$input, other$input);
+    if (!Objects.equals(this.getException(), other.getException())) return false;
+    if (!Objects.equals(this.getMessage(), other.getMessage())) return false;
+    return Objects.equals(this.getInput(), other.getInput());
   }
 
   public int hashCode() {
     final int PRIME = 59;
     int result = 1;
-    final Object $exception = this.getException();
-    result = result * PRIME + ($exception == null ? 43 : $exception.hashCode());
-    final Object $message = this.getMessage();
-    result = result * PRIME + ($message == null ? 43 : $message.hashCode());
-    final Object $input = this.getInput();
-    result = result * PRIME + ($input == null ? 43 : $input.hashCode());
+    result = result * PRIME + (this.getException() == null ? 43 : this.getException().hashCode());
+    result = result * PRIME + (this.getMessage() == null ? 43 : ((Object) this.getMessage()).hashCode());
+    result = result * PRIME + (this.getInput() == null ? 43 : this.getInput().hashCode());
     return result;
   }
 

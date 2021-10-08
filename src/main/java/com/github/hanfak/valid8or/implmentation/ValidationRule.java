@@ -35,26 +35,17 @@ final class ValidationRule<R,E> {
     if (o == this) return true;
     if (!(o instanceof ValidationRule)) return false;
     final ValidationRule<?, ?> other = (ValidationRule<?, ?>) o;
-    final Object this$rule = this.getRule();
-    final Object other$rule = other.getRule();
-    if (!Objects.equals(this$rule, other$rule)) return false;
-    final Object this$exception = this.getException();
-    final Object other$exception = other.getException();
-    if (!Objects.equals(this$exception, other$exception)) return false;
-    final Object this$exceptionMessageFunction = this.getExceptionMessageFunction();
-    final Object other$exceptionMessageFunction = other.getExceptionMessageFunction();
-    return Objects.equals(this$exceptionMessageFunction, other$exceptionMessageFunction);
+    if (!Objects.equals(this.getRule(), other.getRule())) return false;
+    if (!Objects.equals(this.getException(), other.getException())) return false;
+    return Objects.equals(this.getExceptionMessageFunction(), other.getExceptionMessageFunction());
   }
 
   public int hashCode() {
     final int PRIME = 59;
     int result = 1;
-    final Object $rule = this.getRule();
-    result = result * PRIME + ($rule == null ? 43 : $rule.hashCode());
-    final Object $exception = this.getException();
-    result = result * PRIME + ($exception == null ? 43 : $exception.hashCode());
-    final Object $exceptionMessageFunction = this.getExceptionMessageFunction();
-    result = result * PRIME + ($exceptionMessageFunction == null ? 43 : $exceptionMessageFunction.hashCode());
+    result = result * PRIME + (this.getRule() == null ? 43 : this.getRule().hashCode());
+    result = result * PRIME + (this.getException() == null ? 43 : this.getException().hashCode());
+    result = result * PRIME + (this.getExceptionMessageFunction() == null ? 43 : this.getExceptionMessageFunction().hashCode());
     return result;
   }
 

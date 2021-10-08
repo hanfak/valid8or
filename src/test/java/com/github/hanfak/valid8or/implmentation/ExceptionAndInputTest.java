@@ -17,6 +17,6 @@ class ExceptionAndInputTest {
   @Test
   void toStringMethod() {
     var exceptionAndInput = exceptionAndInput(new RuntimeException(), "Some message", 5);
-    assertThat(exceptionAndInput.toString()).isEqualTo("ExceptionAndInput(exception=java.lang.RuntimeException, message=Some message, input=5)");
+    assertThat(exceptionAndInput).hasToString("ExceptionAndInput(exception=java.lang.RuntimeException, message=Some message, input=5)");
   }
 }

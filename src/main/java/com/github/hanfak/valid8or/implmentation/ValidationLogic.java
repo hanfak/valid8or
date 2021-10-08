@@ -3,7 +3,10 @@ package com.github.hanfak.valid8or.implmentation;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static com.github.hanfak.valid8or.implmentation.ExceptionAndInput.exceptionAndInput;
 import static java.lang.String.format;
@@ -113,11 +116,10 @@ final class ValidationLogic<T> {
 
   private Function<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>, ? extends RuntimeException>
   throwException(T input) {
-    return predicateValidationRule -> {
-      return predicateValidationRule.getException()
-          .compose(predicateValidationRule.getExceptionMessageFunction())
-          .apply(nullSafeInput(input)); // ISSUES: if input does not have toString() Overridden it will return method ref in exception message
-    };
+    return predicateValidationRule ->
+              predicateValidationRule.getException()
+                  .compose(predicateValidationRule.getExceptionMessageFunction())
+                  .apply(nullSafeInput(input)); // ISSUES: if input does not have toString() Overridden it will return method ref in exception message
   }
 
   private String nullSafeInput(T input) {
