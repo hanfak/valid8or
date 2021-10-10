@@ -3,6 +3,12 @@
 [![](https://jitpack.io/v/hanfak/valid8or.svg)](https://jitpack.io/#hanfak/valid8or)
 # valid8or
 
+## How to use 
+
+See test for examples of how to use see [here](https://github.com/hanfak/valid8or/tree/main/src/test/java/com/github/hanfak/valid8or/implmentation/couldsatisfy) and [here](https://github.com/hanfak/valid8or/tree/main/src/test/java/com/github/hanfak/valid8or/implmentation/mustsatisfy)
+
+See [wiki](https://github.com/hanfak/valid8or/wiki) for more information and examples
+
 ## Minimal Requirements 
 
 Java 11+
@@ -45,12 +51,6 @@ Add the dependency
     ...
 </dependencies>
 ```
-
-## How to use 
-
-See test for examples of how to use
-
-See [wiki](https://github.com/hanfak/valid8or/wiki) for more information and examples
 
 ## sonarcloud 
 
