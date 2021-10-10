@@ -10,21 +10,32 @@ import static java.lang.String.format;
 public class StubLogger {
 
   private static final String LOG_TEMPLATE = "For input '%s', was not valid because: '%s'";
-  private final Queue<LogEvent> logEvent = new LinkedList<>();
+  private final Queue<LogEvent> logEvents = new LinkedList<>();
 
   public void log(ExceptionAndInput<? extends RuntimeException, Integer> exceptionAndInput) {
-    logEvent.clear();
+    logEvents.clear();
     String message = format(LOG_TEMPLATE, exceptionAndInput.getInput(), exceptionAndInput.getMessage());
 
-    logEvent.add(new LogEvent(message, exceptionAndInput.getException()));
+    logEvents.add(new LogEvent(message, exceptionAndInput.getException()));
+  }
+
+  public void logWarn(ExceptionAndInput<? extends RuntimeException, Integer> exceptionAndInput) {
+    logEvents.clear();
+    String message = format(LOG_TEMPLATE, exceptionAndInput.getInput(), exceptionAndInput.getMessage());
+
+    logEvents.add(new LogEvent(message, exceptionAndInput.getException()));
+  }
+
+  public boolean isEmpty() {
+    return logEvents.isEmpty();
   }
 
   public String lastLogEventMessage() {
-    return logEvent.element().getMessage();
+    return logEvents.element().getMessage();
   }
 
   public Throwable lastLogEventException() {
-    return logEvent.element().getException();
+    return logEvents.element().getException();
   }
 
   private static class LogEvent {

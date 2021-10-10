@@ -70,7 +70,7 @@ final class Valid8orMustSatisfyAllRulesBuilder<T> implements Valid8orMustSatisfy
   }
 
   @Override
-  public ConsumerTerminal<T> useConsumer(Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer) {
+  public Terminal<T> useConsumer(Consumer<ExceptionAndInput<? extends RuntimeException, T>> consumer) {
     check(isNull(consumer), MISSING_CONSUMER);
     this.optionalConsumer = Optional.of(consumer);
     return this;
@@ -113,7 +113,7 @@ final class Valid8orMustSatisfyAllRulesBuilder<T> implements Valid8orMustSatisfy
 
   @Override
   public Set<String> allExceptionMessages() {
-    return this.validationLogic.allExceptionMessages(this.input, this.validationRules, oneFailedValidationRule);
+    return this.validationLogic.allExceptionMessages(this.input, this.validationRules, oneFailedValidationRule, this.optionalConsumer);
   }
 
   @Override

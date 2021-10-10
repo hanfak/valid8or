@@ -37,7 +37,7 @@ final class ValidationLogic<T> {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
       var runtimeException = getExceptionMessage(failedRules, input);
-      var validationException = createExceptionAndInput(runtimeException, input);
+      var validationException = createValidatonException(input, failedRules);
       optionalConsumer.ifPresent(consumer -> consumer.accept(validationException));
       throw validationException.getException();
     }
@@ -61,15 +61,22 @@ final class ValidationLogic<T> {
 
   Set<String> allExceptionMessages(
       T input, ValidationRules<T> validationRules,
-      Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate) {
+      Predicate<List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>>> failedRulesPredicate,
+      Optional<Consumer<ExceptionAndInput<? extends RuntimeException, T>>> optionalConsumer) {
     var failedRules = findFailedRules(validationRules, input);
     if (failedRulesPredicate.test(failedRules)) {
+      optionalConsumer.ifPresent(consumer -> consumer.accept(createValidatonException(input, failedRules)));
       return failedRules.stream()
           .map(ValidationRule::getExceptionMessageFunction)
           .map(exceptionMessageFunction -> exceptionMessageFunction.apply(nullSafeInput(input)))
           .collect(toSet());
     }
     return emptySet();
+  }
+
+  private ExceptionAndInput<RuntimeException, T> createValidatonException(T input, List<ValidationRule<Predicate<T>, ? extends Function<String, ? extends RuntimeException>>> failedRules) {
+    var runtimeException = getExceptionMessage(failedRules, input);
+    return createExceptionAndInput(runtimeException, input);
   }
 
   boolean isValid(T input,
